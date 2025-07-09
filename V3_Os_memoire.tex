@@ -1,0 +1,1992 @@
+\documentclass[12pt, oneside]{report} % Format A4 recto uniquement
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage{fontspec}
+\usepackage{geometry}
+\usepackage{enumitem}
+\usepackage{setspace}
+\usepackage{pdfpages}
+\usepackage{pdflscape}
+\usepackage{xcolor, hyperref} %lien hypertexte
+\usepackage{csquotes}
+\usepackage{ragged2e}
+\usepackage{listings}
+\usepackage{xcolor}
+%\usepackage{algorithm2e}
+\usepackage{titlesec}
+\usepackage{titletoc}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage[all]{hypcap} % Corrige l'ancrage des liens vers les figures/tableaux
+\urlstyle{same} % Garde la police normale pour les URLs
+\usepackage{array, booktabs} % Pour les tableaux
+\usepackage{amsmath, amssymb} % Pour les mathématiques
+\usepackage{amsthm}	
+\usepackage{algorithm, algpseudocode} % Pour les algorithmes
+\usepackage{caption}
+\usepackage[backend=biber,citestyle=authoryear,
+bibstyle=numeric,sorting=nyt,maxcitenames=1,maxbibnames=99]{biblatex}
+\addbibresource{references.bib}
+
+%python----------------------------------------------------------------------------------------------------------------
+\definecolor{codegray}{rgb}{0.95,0.95,0.95}
+
+\lstdefinestyle{pythonstyle}{
+	language=Python,
+	backgroundcolor=\color{codegray},
+	basicstyle=\ttfamily\footnotesize,
+	keywordstyle=\color{blue},
+	commentstyle=\color{gray}\itshape,
+	stringstyle=\color{red},
+	showstringspaces=false,
+	frame=single,
+	columns=fullflexible,
+	breaklines=true
+}
+
+% Configuration de base------------------------------------------------------------------------------------------------------------------------
+\setmainfont{Times New Roman}
+\geometry{a4paper, left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm}
+\setstretch{1.5} % Interligne 1.5
+
+
+% Style des titres
+\titleformat{\chapter}[hang]
+{\normalfont\bfseries\centering\fontsize{14}{16}\selectfont}
+{\chaptertitlename\ \thechapter : }{12pt}{}
+
+
+\titleformat{\section}
+{\normalfont\bfseries\fontsize{12}{14}\selectfont}
+{\thesection}{1em}{}
+
+\titleformat{\subsection}
+{\normalfont\bfseries\fontsize{12}{14}\selectfont}
+{\thesubsection}{1em}{}
+
+\setcounter{secnumdepth}{3}%numerote jusqu'ux subsection
+\setcounter{tocdepth}{2}%afficher dans le sommaire 
+% En-têtes et pieds de page
+%\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\leftmark}
+\fancyfoot[C]{\small\thepage}
+% -- Configuration des légendes (figures + tableaux) --
+% Figures : Numérotation continue (1, 2, 3...) + légende EN DESSOUS
+\counterwithout{figure}{chapter}  % Désactive la numérotation par chapitre
+\renewcommand{\thefigure}{\arabic{figure}}  % Format simple : 1, 2, 3...
+\captionsetup[figure]{
+	position=below,   % Légende en dessous
+	skip=10pt,        % Espace après la figure
+	font=small,       % Taille police
+	labelfont=bf,     % "Figure X" en gras
+	labelformat=simple, % Format "Figure 1"
+}
+
+% Tableaux : Numérotation continue (I, II, III...) + légende AU-DESSUS
+\counterwithout{table}{chapter}  % Désactive la numérotation par chapitre
+\renewcommand{\thetable}{\Roman{table}}  % Chiffres romains : I, II, III...
+\captionsetup[table]{
+	position=above,   % Légende au-dessus
+	skip=10pt,        % Espace avant le tableau
+	font=small,       % Taille police
+	labelfont=bf,     % "Tableau I" en gras
+	labelformat=simple, % Format "Tableau I"
+}
+% Commandes personnalisées pour les mathématiques
+\newcommand{\R}{\mathbb{R}} % Exemple pour les espaces vectoriels
+\newcommand{\N}{\mathbb{N}} % Pour les entiers naturels
+
+%pour la bibliographie en vert.
+\hypersetup{
+	colorlinks=true,
+	linkcolor=green!50!black,  % Vert foncé
+	citecolor=green!50!black,  % Vert foncé pour les citations
+	urlcolor=blue,
+	pdfborderstyle={/S/U/W 0}  % Désactive tout soulignement/bordure
+}
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,            % Liens internes (TOC) en bleu
+	citecolor=green!50!black,  % Citations [1] en vert
+	urlcolor=cyan,             % URLs en cyan
+	pdfborderstyle={/S/D 2 2}, % Bordures en pointillés
+	linkbordercolor=blue,      % Couleur des bordures
+	pdfborder={0 0 2}          % Épaisseur 2pt
+}
+
+% Style pour théorèmes (titres en italique, texte en romain, numérotation section.thm)
+%
+
+
+% Style pour définitions (titres en gras, texte en romain)
+\theoremstyle{definition}
+\newtheorem{defn}{\textbf{Définition}}[section]
+\newtheorem{exam}{\textbf{Exemple}}[section]
+\newtheorem{notation}{\textbf{Notation}}[section]
+\newtheorem{thm}{\textbf{Théorème}}[section]
+\newtheorem{lem}{\textbf{Lemme}}[section]
+\newtheorem{prop}{\textbf{Proposition}}[section]
+\newtheorem{disc}{\textbf{Discussion}}[section]
+\newtheorem{cor}{\textbf{Corollaire}}[section]
+
+
+% Style pour remarques (sans numéro, texte en romain)
+\theoremstyle{remark}
+\newtheorem*{rem}{\textbf{Remarque : }}
+\newtheorem*{nb}{\textbf{NB : }}
+%\newtheorem*{exo}{Exercice : }
+
+% Environnement de preuve ajusté
+\renewcommand{\proofname}{\textbf{Preuve : }} % Remplace "Démonstration"
+
+\begin{document}
+	\DeclareNameAlias{default}{family-given} % Format "Nom, Prénom"
+	
+	% Pages préliminaires (numérotation romaine)
+	\pagenumbering{Roman}
+	
+	% Page de titre (à personnaliser)
+	\includepdf[pages=2]{Page_de_garde_MEMOIRE_MASTER2.pdf}
+	% Créez un fichier séparé pour la page de titre
+	
+	% Dédicace (facultative)
+	\chapter*{Dédicace}
+	\addcontentsline{toc}{chapter}{Dédicace}
+	\begin{flushright}
+		Au nom d'Allah, le tout miséricordieux, le très miséricordieux.\\
+		L'Éternel tout-puissant,\\
+		qui m'a donné la volonté, \\
+    la force et le courage pour la réalisation de ce mémoire.
+	\end{flushright}
+	\begin{center}
+		Je dédie ce modeste travail à : \\
+		Ma mère, \textbf{Coulibaly Massiata}, pour qui aucun mot ne peut exprimer ce qui nous lie.\\ 
+		La mémoire de mon père, \textbf{Coulibaly Ibrahima} parti trop tôt. \\
+		La mémoire de \textbf{Dr Essan Komoé Ambroise}, qui m'a beaucoup relancé avec ses conseils. \\ 
+		Ma \textbf{fratrie}, qui me porte dans leur cœur. \\ 
+		La famille \textbf{Konaté}, et mes amis \textbf{Korlilah} et \textbf{Morgor-Béléba}, pour leur soutien moral et leurs encouragements.\\
+		Tous ceux qui me sont chers, et tous les enseignants qui ont contribué à ma formation. \\  
+		
+	\end{center} 
+	% Remerciements (obligatoire)
+	\chapter*{Remerciements}
+	\addcontentsline{toc}{chapter}{Remerciements}
+	\begin{flushleft}
+	En toute modestie, je souhaite témoigner ma reconnaissance à tous ceux qui m'ont aidé à la réalisation de ce travail. \\
+	Pour commencer, un merci tout particulier à mon enseignant-encadreur Dr \textbf{N'Gohisse Konan Firmin}, Maître de Conférences en analyse numérique, pour son investissement, ses corrections acharnées, sa disponibilité exceptionnelle, sa passion, ses relectures méticuleuses et son énergie contagieuse. 
+	Et à Dr \textbf{Tchiekre Michel Henry}, Assistant en mécanique option modélisation et simulation, pour ce thème alléchant plein de surprise agréable, pour sa rigueur dans le travail et ses compétences dans le domaine.   \
+	
+	Je remercie également Dr \textbf{Soro Brahima} Maître Assistant en probabilité-statistique, Dr \textbf{N’ZI Yoboué Guillaume} Maître Assistant en mécanique, et Dr \textbf{Traoré Lassane} Maître Assistant en analyse fonctionnelle, pour les mots d'encouragement à chaque fois qu'on se trouvait au bas de l'échelle.\
+	
+	Un grand merci à Dr \textbf{Som Alexandre}, Assistant en optimisation et Dr \textbf{Dalié Luc-Donald}, Assistant en probabilité-statistique, pour les moments de légèreté et les échanges enrichissants qui ont su allier travail, sérieux et bonne humeur. Une alchimie rare qui a rendu ce parcours encore plus mémorable. \
+	
+	Sans oublier Dr \textbf{Saraka Modeste} Assistant en mécanique, Dr \textbf{Edo Seka Narcisse} Assistant en géométrie et Dr \textbf{Kadjo Aka Roger} Assistant en probabilité-statistique, pour tout le temps qu'ils aient consacré à notre formation.\ 
+	
+	Je remercie du fond du cœur tous les enseignants de l'UFR Sciences Biologiques en particulier, Dr \textbf{Kablan Landry} (Chef du département MPC) Maître de Conférence en Chimie Minérale, pour tout ce qu'il œuvre pour le département. Et Dr \textbf{Silué Siélé} (Doyen de l'UFR Sciences Biologiques) Maître de Conférence en Physique, pour sa rigueur et sa dévotion quand il s'agit de travail et de discipline.\\ 
+	Et enfin un grand merci à tous le \textbf{personnel administratif}, pour leur chaleureux accueille.
+	\begin{center}
+		\textit{Que par Allah votre récompense soit le paradis.}	  	
+		\end{center}
+	\end{flushleft}
+	
+	%%% Table des matières
+	\tableofcontents
+	
+	\chapter*{Liste des Sigles}
+	\addcontentsline{toc}{chapter}{Liste des Sigles}
+	%\setlength{\tabcolsep}{1pt} % Réduit l'espace entre colonnes
+	\renewcommand{\arraystretch}{1} % Ajuste l'espace vertical
+	
+\begin{minipage}[t]{0.48\textwidth}
+	\begin{tabular}[t]{@{}p{1.2cm}p{10cm}@{}}
+		\textbf{Nomenclature} \\
+		$q$ & Flux de chaleur (W/m²) \\
+		$L$ & Longueur (m) \\
+		$D$ & Diamètre (m) \\
+		$E$ & Puissance émissive (kW/m²) \\
+		$M_w$ & Fraction massique d'eau \\
+		$k$ & Conductivité thermique (W/m·K) \\
+		$c_p$ & Chaleur spécifique (kJ/kg·K) \\
+		$l_f$ & Épaisseur du lit combustible (m) \\ 
+			$a_{fb}$ & Absorptivité du lit de combustible \\
+		$h$ & Coefficient de transfert de chaleur (W/m²K)\\
+		$R$ & Taux de propagation de la flamme (m/s) \\
+		$y$ & Distance entre la flamme et le lit de combustible (m) \\
+	\end{tabular}
+\end{minipage}
+\hfil
+\begin{minipage}[t]{0.48\textwidth} % [t] ajouté ici pour aligner en haut
+	\begin{tabular}[t]{@{}p{1.2cm}p{10cm}@{}} % [t] ajouté ici
+		\\
+		$Re$ & Nombre de Reynolds \\
+		$Pr$ & Nombre de Prandtl \\
+		$s$ & Surface spécifique (m²) \\
+		$u$ & Vitesse du vent (m/s) \\ 
+		$w$ & Largeur du combustible (m) \\
+		$U_{fb}$ & Vitesse du vent interne (m/s) \\
+		$U_w$ & Vitesse du vent ambiant (m/s) \\
+		$w$ & Largeur du lit combustible (m) \\
+	\end{tabular}
+\end{minipage}
+	
+	\vspace{1em}
+	\begin{tabular}{@{}ll@{}}
+		\textbf{Indice} \\
+		$b$ & Braise \\
+		$f$ & Combustible \\
+		$fb$ & Lit de combustible \\
+		$fl$ & Flamme \\
+		$ig$ & Ignition \\ 
+		$vap$ & Vapeur \\
+		$\infty$ & Ambiant/infini \\
+	\end{tabular}
+	\hfill
+	\begin{tabular}{@{}ll@{}}
+		\textbf{Grecque} \\
+		$\varepsilon$ & Émissivité \\
+		$\theta$ & Angle (rad) \\
+		$\mu$ & viscosité dynamique air ($Pa.s$)\\
+		$\rho$ & Masse volumique (kg/m³) \\
+		$\varphi$ & Rapport volumique combustible/lit \\
+		$\sigma$ & Constante de Stefan-Boltzmann \\
+		$\varOmega_{s}$ & Angle de pente (rad) \\
+		$\varOmega_{w}$ & Angle d'inclinaison (rad) \\
+	\end{tabular}	
+	
+	% Liste des abréviations (si nécessaire)
+	\chapter*{Liste des  Abréviations}
+	\addcontentsline{toc}{chapter}{Liste des Abréviations}
+	\begin{tabular}{@{}ll@{}}
+		ANN &Artificial Neural Network  \\
+		DNN & Deep Neural Network \\ 
+		PINNs & Physics-Informed Neural Networks \\
+		SDH/SH & Système Dynamique Hybrides \\ 
+		EDO & Équation Différentielle Ordinaire \\
+		EDP & Équations aux dérivées partielles \\
+		SH$- $EDO & Système hybride d'Équation Différentielle Ordinaire \\
+		SP1 &   Sous Problème 1 \\
+		SP2 &   Sous Problème 2 \\
+		RK4 & Runge-Kutta d'ordre 4 \\
+		MEF & Méthode des Éléments Finis \\
+		MDF & Méthode des Différences Finis \\
+		MVF & Méthode des Volumes Finis \\		
+		
+	\end{tabular}
+	%%% Listes des figures/tableaux
+	\listoffigures
+	\listoftables
+	
+	% Résumés
+	\chapter*{Résumé}
+	\addcontentsline{toc}{chapter}{Résumé}
+Dans ce mémoire, nous nous sommes intéressés à un modèle physique simple de propagation du feu dans un lit de combustible poreux.  
+L’objectif principal était d’analyser mathématiquement la dynamique du modèle, puis d’utiliser l’apprentissage automatique pour estimer les variables clés du phénomène : la température $T(y)$, l’humidité $M_w(y)$ et la vitesse de propagation du feu $R$.
+L’analyse du modèle a révélé un système hybride d’équations différentielles ordinaires, dont le comportement dépend de la température locale.  
+À l’aide d’outils mathématiques tels que certains théorèmes fondamentaux, nous avons montré l’existence globale des solutions.  
+Nous avons ensuite tenté de résoudre le système par des approches analytiques et numériques classiques, avant de mettre en évidence leurs limites face aux transitions abruptes du modèle.
+Face à ces difficultés, nous avons construit un réseau de neurones basé sur les réseaux de neurones physiquement informés (PINNs), formulé de manière à respecter les équations du modèle ainsi que les contraintes initiales.  
+Cette approche nous a permis d’estimer simultanément les profils de température, d’humidité et de vitesse de propagation, avec des solutions globales, continues et différentiables, en accord avec les réalités physiques du phénomène.
+
+\vspace{0.3cm}
+
+\textbf{Mots-clés :} feu de forêt, taux de propagation du feu, système hybride, transition conditionnelle, réseaux de neurones, PINNs.
+
+	
+	\chapter*{Abstract}
+	\addcontentsline{toc}{chapter}{Abstract} 
+	In this thesis, we focused on a simple physical model of fire propagation through a porous fuel bed.  
+	The main objective was to analyze the dynamics of the model from a mathematical perspective, and then to use machine learning to estimate the key variables of the phenomenon: temperature $T(y)$, moisture content $M_w(y)$, and the fire spread rate $R$.
+	The model analysis revealed a hybrid system of ordinary differential equations, whose behavior depends on the local temperature.  
+	Using mathematical tools such as fundamental theorems, we demonstrated the global existence of solutions.  
+	We then attempted to solve the system using analytical and classical numerical approaches, before highlighting their limitations in the face of abrupt regime transitions.
+	In response to these challenges, we built a neural network based on Physically-Informed Neural Networks (PINNs), formulated to satisfy both the model equations and the initial constraints.  
+	This approach enabled us to simultaneously estimate the temperature profile, the moisture content, and the spread rate, with global, continuous, and differentiable solutions that align with the physical realities of the phenomenon.
+	
+	\vspace{0.3cm}
+	
+	\textbf{Keywords:} forest fire, fire spread rate, hybrid system, conditional transition, neural networks, PINNs.
+	
+	
+	%%% Corps du mémoire (chiffres arabes à partir d'ici)
+	\cleardoublepage
+	\pagenumbering{arabic}
+	
+	\clearpage
+	\chapter*{Introduction}  
+	\addcontentsline{toc}{chapter}{Introduction}
+%	contexte
+Elizabeth Goldman, la codirectrice de Global Forest Watch, s’exprimait à propos des données relevées en 2024 sur les feux de végétation, en déclarant : $\og$ Ces chiffres sont bien différents de tout ce que nous avons enregistré en plus de 20 ans de données. $\fg$ Par ses propos, on comprend que la destruction des forêts mondiales due aux incendies a atteint son niveau le plus élevé jamais enregistré, soit 30 millions d’hectares perdus sur les 13,4 milliards d’hectares de surface terrestre en une année.
+
+%	bref generalité
+Les feux de végétation constituent un phénomène physique qui ne cesse de prendre de l'ampleur. Ce phénomène n'a pas laissé les chercheurs indifférents. Ils tentent de comprendre la dynamique de ces incendies.Cela leur a permis de développer plusieurs modèles de feux de végétation afin de prédire le front de flamme (illustré dans la figure \eqref{fig:im10}) ainsi que d'autres paramètres clés tels que la température, l'humidité et la vitesse de propagation du feu. On distingue trois principales approches de modélisation des feux : les modèles empiriques, physiques et semi-physiques \textbf{(Dupuy et Pimont, 2009)}. Les modèles empiriques s'appuient sur de nombreuses observations de terrain pour établir des formules simplifiées reliant la vitesse de propagation du feu à des facteurs environnementaux comme le vent, la pente ou l'humidité du combustible.
+	Les modèles physiques, reposent sur les lois de la physique du feu et permettent une simulation en 3D. 
+Quant aux modèles semi-physiques ils combinent principes physiques et les données empiriques, tout en s'appuyant sur la conservation de l'énergie et des relations issues d'expériences. Le modèle développé par \textbf{Koo \textit{et al}, (2005)} est un modèle physique simple, basé sur la conservation de l'énergie et de mécanisme détaillés de transfert de chaleur. Il décrit la propagation du feu de façon linéaire et stable, dans une couche mince et homogène de combustible poreux. Dans ce modèle, la vitesse est caractérisée comme une valeur propre $R$. Pour prédire cette vitesse, ils supposent que le feu avance de façon contiguë.
+Dans ce travail préliminaire réalisé par Koo et ses collaborateurs, la vitesse de propagation $R$ a été déterminée par la méthode de Runge-Kutta d'ordre 4 (RK4). \clearpage	
+% Problématique, objectif et originalité  
+Toutefois, les méthodes classiques comme RK4, bien qu’efficaces dans certains cas, deviennent limitées face à des systèmes hybrides ou discontinus, notamment en termes de coût de calcul et de précision sur les points de transition. Ce constat soulève la nécessité d’explorer des alternatives capables d’assurer à la fois performance numérique et respect des lois physiques.
+
+Dans ce contexte, notre objectif principal est d’appliquer la méthode des réseaux de neurones physiquement informés (PINNs) à un modèle de propagation de feu dans un lit de combustible poreux, afin d’estimer simultanément les profils de température $T(y)$, d’humidité $M_w(y)$ et la vitesse de propagation du feu $R$.
+Pour rendre cela possible, nous avons d’abord reformulé le modèle physique proposé par \textbf{Koo \textit{et al.} (2005)} sous la forme d’un système hybride à deux régimes (SP1 et SP2), et mené une analyse mathématique approfondie afin de mieux comprendre sa dynamique, de vérifier l’existence globale des solutions et de poser des bases solides pour l’apprentissage.
+Ce choix méthodologique constitue l’originalité principale de ce travail, en proposant une alternative moderne, souple, continue et différentiable aux techniques numériques classiques, souvent rigides ou coûteuses en calcul.
+
+%	Methodologie
+Pour cela, notre démarche consistera dans un premier temps, a donné des outils nécessaires permettant d'analyser mathématiquement le modèle. Parmi ces outils, nous avons le théorème de Cauchy-Lipschitz, de Carathéodory, et l'inclusion de Filippov qui permet de discuter de l'existence de solution. Le théorème faible de Lyapunov qui discute de la stabilité du système, ensuite la méthode des facteurs intégrant et de séparation des variables pour une tentative de résolution analytique et enfin quelques méthodes numériques classiques et leurs limites. 
+Dans un second temps, nous proposons une formulation théorique des PINNs sous la forme d'un réseau de neurones $\theta =(\theta_T, \theta_M, \theta_R)$, a optimiser lors de l'apprentissage du modèle. En accordant une attention particulière aux équations, aux conditions initiales et au paramètre $R$, nous cherchons à déterminer les profils de température $T(y)$, d'humidité $M_w(y)$ et de vitesse de propagation $R$.
+
+%	annoce du plan.
+Afin d'assurer une progression logique et cohérente, ce mémoire s'articule autour de trois chapitres principaux. Le premier chapitre introduit les concepts fondamentaux et présente le modèle de référence qui sert de base à cette étude. Le deuxième chapitre développe en détail la méthodologie employée, en expliquant les outils d'analyse mathématique du modèle de feu de végétation ainsi que l'architecture du réseau de neurones conçu pour résoudre les équations différentielles ordinaires (EDO). Le troisième chapitre expose et discute les résultats obtenus, combinant l'analyse théorique du modèle avec les aspects pratiques de son implémentation à l'aide des PINNs.
+	\clearpage	
+\begin{landscape}
+	\thispagestyle{plain}
+		\begin{figure}
+		\centering
+		\includegraphics[width=1.1\linewidth]{im10}
+		\caption{Propagation du feu dans un combustible thermiquement mince.}
+		\label{fig:im10}
+	\end{figure}
+%	\begin{figure}[h]
+%		\centering
+%		\includegraphics[width=1.1\linewidth]{im16}
+%		\caption{Propagation du feu en situation réel dans une végétation dense.}
+%		\label{fig:im16}
+%	\end{figure}
+\end{landscape}
+	
+	\clearpage
+	
+\part*{ÉTAT DE L'ART}
+%	\addcontentsline{toc}{chapter}{État de l'art}
+	\label{gen}	
+			
+			\chapter{Généralités}
+Ce travail porte sur un modèle de propagation de feu. Ce modèle peut être formulé comme un système hybride. Cette reformulation permet d’en faire une analyse mathématique, avant de le résoudre avec les réseaux de neurones physiquement informés (PINNs).
+Ce chapitre commence par une présentation de quelques travaux liés aux trois notions principales de ce mémoire : les systèmes hybrides, les réseaux de neurones et la modélisation des feux. Ensuite, nous décrivons en détail le modèle de référence qui sera au cœur de notre étude.
+
+		\section{Travaux connexes}
+		\subsection{Les systèmes hybrides}
+	La modélisation mathématique de nombreux phénomènes naturels débouche très généralement sur une ou plusieurs équations différentielles, en fonction de la variable temps, et/ou de variables spatiales.
+	On parle d'équation différentielle ordinaire (EDO) lorsque l'équation met en relation une fonction inconnue d'une seule variable avec ses dérivées. À l'inverse, une équation aux dérivées partielles (EDP) implique une fonction inconnue dépendant de plusieurs variables et met en jeu ses dérivées partielles.
+	
+	En fonction de la nature et de la complexité du phénomène, la modélisation peut aboutir à d'autres classes d'équation différentielle telle que les systèmes d'EDO. Ce modèle est une liaison de plusieurs EDO décrivant des interactions entre plusieurs variables \textbf{(Gallouët \textit{et al}., 2022)}. Les systèmes hybrides sont une combinaison de dynamique continue et d'événement discret \textbf{(Goebel \textit{et al}., 2012)}. Les équations différentielles en retard, sont des équations où la dérivée dépend des valeurs passées de la solution \textbf{(Mecence 2018)}. Plusieurs d'autres classes existent, mais pour ce travail, nous mettrons l'accent que sur les systèmes hybrides.\
+	
+	Les systèmes hybrides d’équations différentielles ordinaires (SH-EDO) résultent de la combinaison d’une dynamique continue, décrite par des EDO, et d’événements discrets, tels que des sauts ou des transitions.
+	La modélisation de ces systèmes, souvent définis par morceaux, pose plusieurs difficultés. Ces défis concernent à la fois leur formulation mathématique et leur résolution.
+		
+	Nous avons le modèle de Zeldolvich-Linan-Dold, permettant d'analyser la propagation des flammes de diffusion, en tenant compte des mécanismes d'extinction dans des configurations physiques simple. C'est un modèle à deux régimes de combinaison séparant le réactif frais des produits brûlés \textbf{(Buckmaster et Ludford 1982)}. Le modèle de combustion des milieux désordonnés développé par \textbf{Schiulaz \textit{et al}., (2018)}. Ce modèle est un système hybride décrivant la transition de phase entre plusieurs dynamiques, qui peut être du premier ou du second ordre, selon les paramètres du système considérés.Ce modèle est un système hybride qui décrit la transition de phase entre plusieurs dynamiques. Cette transition peut être de premier ou de second ordre, en fonction des paramètres choisis dans le système.
+ La propagation du feu et de la fumée dans de grandes surfaces sont modélisés par \textbf{Dizet \textit{et al}., (2022)}. Ce modèle est un système hybride combinant des approches de zones, de fluides, et de réseaux pour simuler la propagation du feu. Pour estimer la vitesse de propagation dans les problèmes libres, \textbf{Lei \textit{et al}., (2021)} développent un modèle sous forme de système hybride permettant de commuter entre les différentes zones (chaudes$\slash$froides). Le modèle de \textbf{Koo \textit{et al}., (2005)} est un système hybride à transition de régime conditionnelle entre deux états. Ces états sont modélisés par des EDO décrivant respectivement l'augmentation de la température et l'évaporation de l'humidité dans un combustible en feu.
+		
+		\subsection{Les réseaux de neurones physiquement informées}
+		
+	Traditionnellement la résolution des équations différentielles ou des systèmes complexes s'appuyaient sur des méthodes classiques telles que la méthode des éléments fins, différences finis, volume finis, Runge-Kutta d'ordre 4 (RK4) etc.. Mais la plupart de ces méthodes traditionnelles sont limitées par un maillage très fin pour obtenir des résultats précis. Ses limites sont suffisamment détaillées par \textbf{Mullins (2025)}. Depuis leur introduction par Raissi et al. (2019), les réseaux de neurones physiquement informés (PINNs) se sont imposés comme une alternative prometteuse aux méthodes numériques classiques pour la résolution de problèmes physiques. Cette nouvelle approche combinant l'apprentissage automatique à la physique à permis de résoudre plusieurs problèmes modélisés par des équations différentielles. Le plus récent est celui de \textbf{Mullins (2025)}. L'auteur associe la méthode des PINNs à d'autres modèles pour la résolution des équations en mécanique des fluides. \textbf{Irsalinda \textit{et al}., (2025)}, ont combiné la méthode des PINNs et l'algorithme d'optimisation Chat-Souris (CMBO) pour résoudre des EDP. textbf{Zhang et al. (2025)} ont résolu des équations aux dérivées partielles (EDP) physiques en intégrant les contraintes grâce à une combinaison des PINNs avec un réseau de type Kolmogorov-Arnold. \textbf{Mele et Pironti (2024)} donnent une approximation des fonctions de Lyapunov en combinant les PINNs et la formule de Sontag, pour estimer les états d'un système dynamique. \textbf{De Curtò et De Zarzà (2024)} combinent les PINNs à un filtre de Kalman adaptatif, pour améliorer les prédictions et la transparence des modèles écologique. Nous disposons de plusieurs travaux dans ce sens, et aussi des travaux d'amélioration des PINNs par les auteurs fondateurs \textbf{(Raissi \textit{et al}., 2024)} et d'autres chercheurs. \
+	
+	Pour faciliter leur implémentation, plusieurs librairies d'apprentissage profond ont été développées. Les plus populaires sont Tensorflow \textbf{(Abadi \textit{et al}., 2015)} et développé par Google. PyTorch développée par \textbf{Paszke {et al}., (2019)} et  DeepXDE développée par \textbf{Karniadakis \textit{et al}., (2019)}, PyDEns développée par \textbf{Koryagin \textit{et al}., (2019)}. %cité par \textbf{Chen \textit{et al}., (2020)}.
+		
+		\subsection{La modélisation du feu}
+	En raison de la multiplicité des facteurs du feu et de la dangerosité du phénomène (voir figure \ref{fig:im16}-Annexe II), la modélisation des incendies en condition naturelle constitue une tache ardue \textbf{(Dupuy et Pimont, 2009)}. Cependant, depuis plus d’un demi-siècle, les chercheurs cherchent à quantifier la vitesse de propagation des incendies à travers différents types de combustibles. Plusieurs modèles mathématiques ont été développés dans ce sens.
+	À commencer par \textbf{Fons (1946)} qui a introduit l'idée de préchauffage du combustible jusqu'à l'inflammation à travers des combustibles forestiers afin d'analyser la propagation de la flamme. \textbf{Emmons (1963)} et \textbf{Hottel \textit{et al}., (1963)} formalisent les premières équations physiques modélisant un phénomène de feu tout en discutant de son mécanisme de propagation. 
+	\textbf{Rothermel (1966) et Andrews (1986)}, ont développé un modèle empirique qui a conduit au développement de modèle opérationnel BEHAVE (Fire Behavior Prediction and System). Ce modèle permet de calculer la vitesse du feu utilisé par le simulateur FARSITE (Fire Area Simulator), encore utilisé aujourd'hui malgré leurs limites (effets additifs vent/pente).
+	\textbf{Fang et Steward (1969)}, à l'aide des expériences de laboratoires, ont évalué les paramètres de la vitesse de propagation du feu. \textbf{Albini (1981), Putnam (1965), Thomas (1963)} et \textbf{Pitts (1991)}, cités par \textbf{Koo \textit{et al.} (2005)}, ont mis en évidence l'importance de l'effet du vent et de sa direction, qui jouent un rôle majeur dans la modélisation de la propagation du feu.  
+	\textbf{Weise et Biging (1997)} ont, quant à eux, proposé un modèle statistique basé sur des expériences en laboratoire, en utilisant le bouleau blanc comme combustible.
+	\textbf{Pagni et Peterson (1973)} ont axés leur modélisation sur les milieux poreux qui sera validée par la suite expérimentalement par \textbf{Mongia et \textit{et al}., (1998)}. \textbf{Wu \textit{et al}., (2003)} et \textbf{Mabli (2001)} ont élargi les validations expérimentales (herbes, bambou). \textbf{Dupuy \textit{et al}., (2009)} montrent les limites et les complexités que cachent chaque modèle, et leur importance pour la simulation et la prédiction de la propagation des incendies. \textbf{Pimont (2008)} à partir du simulateur FIRETEC (Fire Technology), détermine comment les caractéristiques physiques du combustible forestier (densité, hétérogénéité) influencent la vitesse de propagation et l'intensité du feu.
+	Sur la base de toutes ces expériences \textbf{Koo \textit{et al}., (2005)} ont développé un modèle physique simple dans des combustibles poreux, pour prédire le taux de propagation d'un incendie.
+		
+			\section{Formulation physique du modèle de référence} 
+		
+			Le modèle de \textbf{Koo \textit{et al}., (2005)} est un modèle physique simple basé sur la conservation de l'énergie et des mécanismes détaillés de transfert de chaleur voir équation \eqref{f:conservation}, dans un combustible en feu supposé stationnaire. Ce modèle permet de comprendre l'évolution du feu, dans un milieu naturel composé de végétal fin (broussailles, les herbes sèches ou les litières d'aiguille de pin). Avec pour objectif de prédire l'évolution du feu en fonction de la température $T$ et de l'humidité $M_w$, tout en déterminant le taux de propagation des incendies à travers le combustible. La détermination de ce taux, dépend de plusieurs paramètres tels que : les propriétés du combustible (porosité, humidité), la configuration du lit (épaisseur, pente), les conditions ambiantes, et la flamme supposée comme l'unique source de chaleur. %, qui est un facteur important en raison de sa géométrie (longueur, angle d'inclinaison).\ 
+		Pour simplifier le modèle, on suppose que le lit de combustible est thermiquement mince (L'épaisseur du lit est inférieure à la longueur de la flamme.), et le front de flamme progresse à une vitesse constante le long du combustible.
+		
+		Pour la mise en place du modèle, \textbf{Koo \textit{et al}., (2005)} adoptent les conditions suivantes :  
+		\begin{itemize}
+			\item[$\bullet$] {Sur la géométrie du combustible}, on suppose que le lit est unidimensionnel, homogène, et poreux. Son épaisseur est thermiquement mince, et la température est uniforme sur sa hauteur.
+			\item[$\bullet$] Sur la cinématique de la flamme, on suppose que la flamme est modélisée comme une feuille bidimensionnelle pour laquelle on néglige l'épaisseur sauve dans le calcul du rayonnement. Les réactions chimiques sont supposées instantanées, et le référentiel est fixé sur la flamme. %, c'est-à-dire (le combustible se déplace vers elle à une vitesse constante $R$). 
+			
+			%\item {Paramètre clés :} la vitesse du vent $U_w$ (parallèle au lit), la pente du terrain $\Omega_s$ est définie comme l'angle entre la normale et la gravité.
+			%\item {Préchauffage du combustible} : Avant l'inflammation le lit est chauffé jusqu'à $T_{\text{ig}}$ et le profil de température $T(y)$ varie de $T_{\infty} \text{ à } T_{\text{ig}}$
+		\end{itemize}
+		En se basant sur la conservation de l'énergie et des mécanismes de transferts de chaleur. Ces hypothèses ont permis de donner une formulation physique du modèle \eqref{f:conservation}.
+		
+		\subsection{Conservation de l'énergie}
+Il existe trois modes de transfert de chaleur : la conduction, la convection et la radiation. En négligeant la conduction à travers le lit de combustible, l’énergie conservée dans chaque élément de combustible ne dépend plus que de la convection et de la radiation. Ce mécanisme est décrit par l’équation \eqref{f:conservation} et illustré par la figure \eqref{fig:im0}.
+
+\begin{equation}\label{f:conservation}
+	\large\begin{aligned}
+		q_{\text{s}} + q_{\text{l}} = q_{\text{rs}}  + q_{\text{ri}} + q_{\text{pr}}+ q_{\text{cs}} + q_{\text{ci}}
+	\end{aligned}
+\end{equation}
+
+Dans cette équation, $q_{\text{s}}$ désigne la chaleur sensible ; $q_{\text{l}}$, la chaleur latente ; $q_{\text{rs}}$, la radiation surfacique ; $q_{\text{ri}}$, la radiation interne ; $q_{\text{pr}}$, les pertes radiatives ; $q_{\text{cs}}$, la convection surfacique ; et $q_{\text{ci}}$, la convection interne. Le membre de gauche correspond à l’énergie absorbée pour élever la température ou évaporer l’humidité de l’élément combustible. Celui de droite représente la somme des différents mécanismes de transfert thermique agissant sur cet élément.
+		
+		\subsection*{L'énergie absorbée}
+		C'est l'énergie nécessaire pour maintenir la température d'inflammation à l'origine ($y = 0$). Pour une distance $y$ donnée l'énergie sensible nécessaire est définie par : 
+		\begin{equation}
+			q_{\text{sensible}} = \begin{cases}
+				-\rho_f C_{pf}R \phi\frac{d T}{d y} & \text{si } T \neq 373\,\mathrm{K}, \\
+				0  & \text{si } T = 373\,\mathrm{K}.
+			\end{cases}
+		\end{equation}
+		Où $\rho_f$ est la masse volumique des particules, $ c_{pf}$ la capacité thermique spécifique du lit, $\phi$ le compactage  % (est le volume de combustible solide par unité de volume de lit) 
+		et $T(y)$ la température du combustible au point $y$. On suppose que l'énergie ne s'évapore que lorsque l'humidité dans le combustible atteint la température d'ébullition de l'eau, supposé $373K$. Il peut être exprimé comme suit :   
+		\begin{equation}
+			q_{\text{latent}} = \begin{cases}
+				\rho_f h_{\text{vap}} R \phi\frac{d M_w}{d y} & \text{si } T = 373\,\mathrm{K}, \\
+				0 & \text{si } T \neq 373\,\mathrm{K}.
+			\end{cases}
+		\end{equation}
+		Où $h_{\text{vap}}$ est l'enthalpie de vaporisation de l'eau, $M_w(y)$ l'humidité en $y$. %(rapport entre la masse d'eau et la masse de lit combustible humide) 
+		
+				
+		\clearpage
+		\begin{landscape}
+			\begin{figure}
+				\centering
+				\includegraphics[width=1.2\linewidth]{im0}
+				\caption{Schéma du mécanisme de propagation du feu.}
+				\label{fig:im0}
+			\end{figure}
+		\end{landscape}
+		\clearpage
+		
+		
+		\subsection{Mécanismes de transfert de chaleur}
+		\subsubsection{Radiation}
+		Supposons que la flamme est une feuille isotherme à émissivité uniforme et soit \\ $E_{fl} \approx \epsilon_{fl}\sigma T_{fl}^4$ la puissance émissive radiative de la flamme, où $ T_{fl}$  est la température de la flamme et $\epsilon_{fl}$ est l'émissivité de la flamme. Le rayonnement de la flamme vers chaque élément en $y$ sur la surface supérieure du lit de combustible est  : 
+		\begin{equation}\label{f:q_sr}
+			q_{\text{rs}} = \frac{a_{fb}E_{fl}}{2l_f}\left[1-\frac{Z}{\left({1+(Z)^2}\right)^{1/2}}\right]\tanh\left[\frac{2}{3}\left(\frac{w}{L_{fl}}\right)^{1/3}\right].
+		\end{equation}
+		
+		Où $w$ est la largeur du lit, $l_f$ est l'épaisseur de la couche de combustible, $L_{fl}$ est la longueur de la flamme et $\left[Z = (y/L_{fl }- \sin\theta)/ \cos\theta\right]$ le facteur de vue \textbf{(Koo \textit{et al.,}2005)}. L'angle d'inclinaison de la flamme $\theta$, est la somme de $ \Omega_s $ et $ \Omega_w $ où $ \Omega_w $ est l'angle d'inclinaison dû au vent et approximé comme $\Omega_w = tan^{-1}[1.4Uw(gL_{fl})^{-1/2}]$ d'après Putnam (1965).
+		
+	En utilisant les propriétés de la suie pour le bois de chauffage obtenues expérimentalement, l'émissivité de la flamme $\epsilon_{fl}$ peut être approximée comme dans l'équation \eqref{f:epsilonfl} avec la longueur moyenne du faisceau de flamme proportionnelle à $L_{fl}$ et un coefficient d'absorption total effectif de $ 0,6 m^{-1}$ : 
+		\begin{equation}\label{f:epsilonfl}
+			\epsilon_{fl} = 1 - e^{-0.6L_{fl}}
+		\end{equation}  
+		
+			À l'intérieur du lit de combustible poreux, le combustible non brûlé reçoit un flux de chaleur radiative à travers le volume du lit de combustible à partir de la zone de braises. Ce rayonnement interne décroît exponentiellement à la distance $ y $ de la zone de combustion : 
+		\begin{equation}
+			q_{\text{ri}} = 0.25sE_b\exp\left(-0.25sy\right).
+		\vspace{-0.4cm}
+		\end{equation}
+	
+		Où $s$ est la surface totale des particules de combustible par volume de lit de combustible et la puissance émissive des braises $E_b \approx \epsilon_{b}\sigma T_b^{4}$. On suppose que l'émissivité de la braise est $ \epsilon_{b} = 1 $ et la température de la braise est $T_b = T_{ig}$.
+			
+	Les éléments combustibles non brûlés perdent de la chaleur dans l'air ambiant en raison de la perte radiative à la surface supérieure du lit de combustible. Ce qui est représenté par l'équation : 
+\begin{equation}
+q_{\text{pr}} = -\frac{\epsilon_{fb}\sigma\left(T^4(y) - T_\infty^4\right)}{l_f}.
+\end{equation}
+		
+	
+		\subsubsection{Convection}
+	Le lit de combustible échange de la chaleur avec l'air par convection à la fois à la surface et à l'intérieur et peut être chauffé ou refroidi.
+	\textbf{Selon Beer (1991)} %cité par \textbf{Koo \textit{et al}, (2005)}
+	 la feuille de flamme étant bidimensionnelle le vent peut pénétrer avec une vitesse uniforme proportionnelle à la fois à la porosité et à la vitesse ambiante du vent $U_{fb} = (1-\varphi)U_w.$ 
+	La convection dépend de la configuration vent/pente présentée par la figure \ref{fig:im6}, pour la convection de surface, la température de flamme $T_{fl}$ est utilisée comme température de référence du gaz pour les cas heading et $T_{\infty}$ est utilisée pour les cas backing. Pour les cas heading, on suppose que la différence de température diminue de façon exponentielle avec la distance $y$ de la flamme. \textbf{(Koo \textit{et al.,}2005)} le transfert de chaleur par convection vers la surface supérieure du lit de combustible est alors : 
+		\begin{equation}\label{f:sc1}
+			\begin{aligned}
+				q_{\text{sc,heading}} &= \frac{0.565k_{fl}\mathrm{Re}_y^{1/2} \mathrm{Pr}^{1/2}}{y l_f}\left(T_{fl}-T(y)\right)e^{-\frac{0.3y}{L_{fl}}} \\
+				&= \frac{0.565k_{fl}(\rho u)^{1/2} \mathrm{Pr}^{1/2}}{\mu l_f y^{1/2}}\left(T_{fl}-T(y)\right)e^{-\frac{0.3y}{L_{fl}}}
+			\end{aligned}
+		\end{equation}
+			\begin{equation}\label{f:sc2}
+			\begin{aligned}
+				q_{\text{sc,backing}} &= \frac{0.565k_\infty \mathrm{Re}_{L_{fb}-y}^{1/2}\mathrm{Pr}^{1/2}}{(L_{fb}-y)l_f}\left(T_\infty-T(y)\right) \\
+				&= \frac{0.565k_\infty (\rho u)^{1/2}}{\mu (L_{fb}-y)^{1/2}l_f}\left(T_\infty-T(y)\right)
+			\end{aligned}
+		\end{equation} 
+		
+			Le coefficient de transfert de chaleur par convection d'un seul cylindre en tangage est utilisé pour l'intérieur du lit de combustible. Les équations \eqref{f:sc1} et \eqref{f:sc2} représentent le transfert de chaleur par convection à l'intérieur du lit de combustible. Notez que les nombres de Reynolds dans l'équation \eqref{f:sc1} et l'équation \eqref{f:ic1} sont différents. 
+			
+L'échelle de longueur de l'équation \eqref{f:sc1} est la coordonnée du lit de combustible $(L_{fb} - y)$ et la vitesse $U_w$, l'échelle de longueur de l'équation \eqref{f:ic1} est le diamètre de la branche D et la vitesse est $U_{fb}$. 
+\begin{equation}\label{f:ic1}
+q_{\text{ic,heading}} = \frac{0.911sk_b \mathrm{Re}_D^{0.385}\mathrm{Pr}^{1/3}}{D}\left(T_b-T(y)\right)e^{-0.25sy}
+\end{equation}
+\begin{equation}\label{f:ic2}
+q_{\text{ic,backing}} = \frac{0.911sk_\infty \mathrm{Re}_D^{0.385}\mathrm{Pr}^{1/3} }{D}\left(T_\infty - T(y)\right)
+\end{equation}
+où D est le diamètre des particules de combustible (m), $k_b$ est la conductivité thermique de la braise, $k_{\infty}$ est la conductivité thermique à l'extrémité de droite et Pr est le nombre de prandlt \textbf{(Koo \textit{et al., } 2005)}. 
+			
+					\clearpage
+			\begin{landscape}
+				\begin{figure}
+					\centering
+					\includegraphics[width=1.1\linewidth]{im6}
+					\caption{Configurations de vent et de pente.}
+					\label{fig:im6}
+				\end{figure}
+			\end{landscape}
+			\clearpage
+							 
+	Tel qu'énoncé dans l'introduction, le modèle de propagation du feu décrit, a été résolu par \textbf{Koo \textit{et al} (2005)} à l'aide de la méthode de Runge-Kutta d'ordre 4 (RK4). Ils considèrent le taux de propagation $R$ comme une valeur propre à estimer à l'aide d'une méthode d'optimisation implicitement citée. Les profils de $T$ et $M_w$ sont tracé en considérant le système comme des états discontinus par morceaux. D'après les simulations la vitesse de propagation était de $ 0.062 $ et les graphes obtenus sont présentés par la figure \eqref{fig:im1-2}.
+	
+Néanmoins, nous proposons de résoudre ce modèle à l’aide des PINNs. Cette méthode consiste à entraîner un réseau de neurones pour qu’il approxime directement la solution de l’équation différentielle, en imposant que celle-ci respecte les lois physiques qui la gouvernent, plutôt que de procéder à une intégration numérique classique.
+	
+	\clearpage
+	\begin{landscape}
+			\begin{figure}
+			\centering
+			\includegraphics[width=1\linewidth]{"im1 (2)"}
+			\vspace{0.3cm}
+		\caption{\Large Tracé des profils $T, M_w$ et contribution de chaque flux avec RK4.}
+			\label{fig:im1-2}
+		\end{figure}
+	\end{landscape}
+		
+
+	\part*{MÉTHODOLOGIE}	
+	
+	\chapter{Méthodologie}
+	\label{chp:generalité}
+%	\section*{Introduction }	
+
+	Dans cette partie, nous présenterons les fondements mathématiques permettant d'identifier la nature du modèle, d'étudier l'existence de la solution et la résolution ci-possible analytique et numérique par les méthodes classiques. Ensuite, nous exposerons le cadre théorique des réseaux de neurones physiquement informés pour la résolution du modèle de \textbf{Koo \textit{et al}., (2005)}.
+	
+	
+	\section{Systèmes hybrides d'EDO} 
+	\label{sec:gen-EDO}
+	
+	Les systèmes hybrides d'EDO (SH-EDO) combinent à la fois des lois continues et des événements discrets. Ils modélisent des phénomènes dynamiques qui sont continus et souvent décris par des EDO, mais interrompus ou modifiés par des événements discrets comme des points de transition, ou des sauts.
+	
+	\textbf{Branicky et Michael (1995)}, décrient les systèmes hybrides comme des systèmes dans lesquels des automates finis pilotent des processus continus, c'est le cas des systèmes embarqués. Au sens de \textbf{Hedfi, (2013)} un système hybride est un système composé de dynamiques continus, d'événements discrets et d'une interface qui gère les interactions entre ces deux types d'évolutions. Bien que les systèmes hybrides soient présents dans beaucoup de domaines, ils n'ont pas encore été formulés par une description mathématique commune en raison de leur grande diversité. L'une des formulations générales est donnée par \textbf{Kazuyuki et Suzuki (2010)} de la façon suivante : 
+\begin{align}
+	\frac{dx(t)}{dt} &= F_{i(t)}\left(x(t), u(t), \mu \right), \\
+	i(t) &= G(i(t^-), x(t^-), u(t), \mu), \\
+	x(t) &= R(i(t^-), x(t^-), u(t), \mu),\\
+	y(t) &= O(i(t), x(t), u(t), \mu), 
+\end{align}
+où $x(t) \in \R^n$ est l'état continu à l'instant t $\in \R$ ; $i(t) \in {1, ... , N} $ est l'état discret à l'instant t ; $F_{i(t)}$ est la fonction lisse vectorielle spécifiée par $i(t)$ ; $u(t) \in \R^m$ est l'entrée externe ; $\mu \in \R^l$ est un paramètre du système ; $G$ est une carte des transitions d'états discrets de $i(t^-)$ à $i(t)$ ; $R$ est l'une des cartes réinitialisés d'états continus accompagnant une transition d'états discrets ; $y(t) \in \R^k$ est la sortie ; et $O$ est la fonction de sortie.
+
+Si $R$ est l'identité, c'est-à-dire : $R(x(t)) = x(t)$ alors le système est sans saut, on parle alors d'état continu \textbf{(Liberzon, 2003)}.
+
+	
+	%		\begin{defn}[Définition simplifié] \
+		%			
+		%			Soit le système hybride : \begin{equation*}
+			%				\begin{cases}
+				%					y'(t) = H(y(t)), & y(t) \in C \\
+				%					y(t_0) = H_0(y(t_0)), & y(t_0) \in D
+				%				\end{cases}
+			%			\end{equation*} modélise par le quadruplet (C, F, D, G) avec: 
+		%				\begin{itemize}
+			%					\item $C \subseteq \R^n $ l'ensemble des zones de validité des fonctions. 
+			%					\item $F: \R^n \textrightarrow  \R^n$ l'ensemble des EDO; $y'(t) = H(y(t))$, 
+			%					\item $D  \subseteq \R^n $ l'ensemble des événements discret (sauts),
+			%					\item $G : \R^n \textrightarrow \R$ les points d'application des saut $y_0 = F_0$.\
+			%					 
+			%					Cette formulation est très pratique et beaucoup utilisée dans l'analyse qualitative des trajectoires.
+			%				\end{itemize}
+		%		\end{defn}
+	
+\subsection{Stabilité des systèmes hybrides}
+
+{Rappel : }D'après \textbf{(Pujo 1918)}, on dit qu'une EDO est autonome si la fonction ${f}$ ne dépend pas explicitement de ${t}$, c'est-à-dire si l'EDO peut s'écrit sous la forme :
+\begin{equation}
+	y^{(n)} = {f}({y},{y}',{y}'', ... , {y}^{(n-1)})
+\end{equation}
+
+\subsubsection*{Fonction de Lyapunov}
+\textbf{Définition : }Fonction de Lyapunov \textbf{(Mecence 2018)}
+
+Soient la fonction scalaire $V: \R^n \textrightarrow \R_{+}$ et le système dynamique autonome défini par : 
+\begin{equation}
+	y'(t) = f(y), \quad \text{ où }  y \in R^n \text{ et } y_0\text{ le point d'\ équilibre.}
+\end{equation}
+On dit que $V(y)$ est une fonction de Lyapunov pour le système autour du point d'équilibre $y_0$ si elle vérifie les conditions suivantes : 
+\begin{enumerate}
+	\item Définie positive, c'est-à-dire : $ \forall y \neq y_0, \quad V(y_0) = 0, \text{ et } V(y) >  0.$
+	\item Décroissance le long des trajectoires du système, c'est-à-dire :\\
+	$ {V'}(y) = \nabla V(y)\cdot{y'} \leq 0, \forall y \neq y_0 $.
+\end{enumerate}
+
+	
+%	\begin{thm}[Théorème faible de Lyapunov]\
+%		
+%		Pour \textbf{Khalil (2002)} si  $V$ est une fonction de Lyapunov telle que $\forall y \neq y_0, \quad {V'}(y)\leq 0$, alors le point d'équilibre est stable. Si de plus ${V'}(y) < 0 ,  \forall y \neq y_0$, alors le point d'équilibre est asymptotiquement stable. 
+%	\end{thm}
+%	
+	
+%		\textbf{Exemple : } Chauffage électrique. \
+%		
+%	 Considérons une pièce munie d'un chauffage électrique qui fait varier la température de la pièce en fonction du temps. Un thermostat active le chauffage si la température descend en dessous de $T_{\text{min}}$ et le désactive quand elle dépasse $T_{\text{max}}$, ceci peut être modélisé par le système hybride d'EDO suivant : 
+%	\begin{equation}
+%		\label{ex:metho}
+%		\begin{cases}
+%			\frac{dT_c}{dt} = -a(T - T_e) + P, & \text{ mode ON}, \\
+%			\frac{dT_r}{dt} = -b(T - T_e), & \text{ mode OFF},\\ 
+%			T(0) = T(0) \leq T_{\text{min}}.
+%		\end{cases}
+%	\end{equation} 
+%	Où : $a, b $ le coefficient de perte thermique, $T_e$: la température extérieure,  $T(t)$: la température de la pièce et $P>0$ est la puissance du chauffage. 
+%	
+%	 Soit $V$ la fonction de Lyapunov définie par : $V(y) = \frac{1}{2}y^2$. \\
+%		Posons : $y = T-T_{e} \Longrightarrow {y'(t)} = -ay(t) $.\\
+%		Ainsi : ${V'}(y) = y\cdot{y'} = y(-ay) = -ay^2 < 0$. \\
+%		Donc : l'origine est asymptotiquement stable, ce qui signifie que la température converge vers celle de l'extérieur. 
+	
+	%		\begin{thm}\textbf{(Branicky., 1998)}\
+		%			
+		%			Soit un système hybride à dynamique ${f}_q$ dans chaque mode $q$, et une fonction : 
+		%			 \begin{align}
+			%			 	V : Q\times X \textrightarrow \R_{+} \quad \text{ telle que } V_q (0) >0 \text{ pour } x\neq0, \quad V_q(0) = 0
+			%			 \end{align}
+		%			 Si pour chaque mode $q$ : 
+		%			 \begin{enumerate}
+			%			 	\item La dérivée décroit le long des trajectoires continues, i.e : \\    $\dot{V}_q(y) = \nabla V_q(y)\cdot{f}_q \leq - \alpha V_q(y)$, avec $\alpha>0$
+			%			 	\item La dérivée chute ou reste constant lors des sauts : $V_q'(y^+) \leq V_q(y)$ pour les transitions ($q \textrightarrow q'$) 
+			%			 \end{enumerate}
+		%			 Alors l'origine est asymptomatiquement stable.
+		%		\end{thm}
+	%		\begin{proof} Pour la démonstration complète voir  \parencite{branicky98} \
+		
+		%			\textbf{Principe :} On relie chaque fonction a une fonction Lyapunov qui décroit exponentiellement, en se rassurant que lors des sauts, les fonctions ne croît pas au pire elle reste constante, ainsi en combinant toutes les trajectoires hybrides on obtient une décroissance globale.
+		%		\end{proof}
+	%		\begin{exam}[Thermostat] \
+		%	
+		%			On a : \begin{equation*}
+			%				\begin{cases}
+				%					T'_0(t) = -a (T(t)- T_{\text{ext}}); & q_0 : \text{ Chauffage OFF} \\
+				%						T'_1(t) = -a (T(t)- T_{\text{ext}})+P; & q_1 : \text{ Chauffage ON}
+				%				\end{cases}
+			%			\end{equation*}
+		%			Soit la fonction de Lyapunov : $V_q(T) = \frac{1}{2}(T-T^*)^2$,  avec $T^*$ la température d'équilibre.\\  
+		%			Alors ${V'}{q_0}(T) = (T-T^*)(-a(T-T_{\text{ext}})) = -a(T-T^*)(T-T_{\text{ext}})$.\\
+		%			Si a chaque saut $V_{q_1}(T^+) \leq V_{q_0}(T)$ alors l'origine est asymptotiquement stable.
+		%		\end{exam}
+	
+	\subsection{Comportement Zeno}
+	
+	Un système Zeno est un système hybride dans lequel une infinité d'événements se produisent en un temps fini \textbf{(Lygeros \textit{et al}, 2003)}.
+	\begin{defn}\
+		
+		Soit $(t_k)_{k\in\N}$ la suite des instants de saut, le comportement Zeno a lieu si :\begin{equation}
+			\sum_{k=1}^{\infty}(t_{k+1}-t_{k}) < \infty.
+		\end{equation}
+		C'est un phénomène délicat entre modélisation mathématique, et réalité physique. Il est cohérent mathématiquement, mais irréalisable physiquement. Car ce comportement pose des problèmes à la fois lors de la simulation numérique, et aussi pour l'interprétation physique du modèle. D'après \textbf{Lygeros \textit{et al}, (2003)} ce comportement peut-être évité en imposant un temps minimal entre les commutations.
+	\end{defn}
+%	\subsubsection{Conditions d'évitement}
+%	D'après \textbf{Lygeros \textit{et al}, (2003)}
+%	certaines conditions géométriques ou dynamiques permettent d'éviter ce comportement lors des modélisations en imposant un temps minimal entre les commutations.
+%	
+	\subsection{Classification des systèmes hybrides}
+	\label{sub:driven} 
+	Selon la nature du temps, on distingue 4 types de transition dans les systèmes hybrides.
+	\begin{enumerate}
+		\item \textbf{Transition ponctuelle} :
+		la transition a lieu à un instant précis, elle est déclenchée par un évènement discret explicite indépendante de la variable d'état. C'est l'exemple de l'ampoule qui s'éteint ou s'allume lorsqu'on appuie sur le contact \textbf{(Liberzon, 2003)}.
+		\item \textbf{Transition conditionnelle} : 
+		la condition est imposée sur la variable d'état continu $f_q$ ou discret. C'est le cas pour un modèle de feu qui change de régime entre la variation de la température et l'évaporation de l'humidité dans un combustible. Cet échange a lieu généralement lorsque la température atteint celle de l'ébullition de l'eau soit $373\,\mathrm{K}$ \textbf{(Lygeros \textit{et al}, 2003)}.
+		\item \textbf{Transition sur un intervalle} :
+		les systèmes alternent entre plusieurs dynamiques couplées sur des intervalles de temps définis. C'est l'exemple des feux de circulation avec un intervalle de temps déterminé. 
+		\item \textbf{Les transitions à commutation multiple} : les transitions dépendent de la combinaison logique de plusieurs événements discrets. Complexe à mettre en œuvre et c'est le cas d'un robot qui change en fonction de multiples capteurs \textbf{(Alur \textit{et al}, 2000)}.
+	\end{enumerate}
+	Cette classification structure l'analyse des systèmes hybrides selon leurs mécanismes de commutation.
+	
+	\subsection{Problème récurrent des systèmes hybrides}
+	%		La modélisation de plusieurs phénomènes aboutissent à des SH, combinant dynamique continues et évènement  discret présentent plusieurs autant sur le plan théorique et numérique.
+	\subsubsection{Discontinuité et non-linéarité des systèmes hybrides}
+	Les commutations entre les modes introduisent des discontinuités dans les trajectoires, causées par les changements brusques de dynamique changeant complètement le comportement du système. Très souvent, les lois des différents régimes sont non-linéaires et rendent difficilement manipulable le système d'où l'inapplicabilité des théorèmes classique tel que le théorème de Cauchy.
+	
+%	\begin{exam}
+%		Un reset $y^+ = R ( y^-)$ brise la continuité de $y(t)$.
+%	\end{exam}
+	
+	\subsubsection{Difficulté de linéarisation et sensibilité aux erreurs}
+	
+Il existe des cas, où la linéarisation locale du système autour du point de transition est impossible, car la fonction peut ne pas être définie en ce point donc discontinu et non-dérivable. Les dynamiques étant liées par des événements discrets, une petite perturbation pourrait changer le moment ou la position de la transition, rendant ainsi l'analyse sensible aux erreurs. Un autre problème courant est la rigidité des systèmes, car certaines fonctions de transition sont non dérivables. Dans certains systèmes, les points de commutation ne sont pas connus, car elles dépendent de la fin du régime précédent \textbf{\textbf{(Branicky et Michael}, 2005)}. %Ce qui aboutit très rarement à des solutions sous forme fermée d'où la remise en question des méthodes analytiques traditionnelles. 
+
+%	\subsection{Conclusion }
+Les systèmes hybrides apparaissent comme un puissant outil de modélisation des phénomènes combinant continuité et discontinuité. Intervenant dans plusieurs domaines scientifiques, cette expressivité s'accompagne de défis analytiques majeurs, rendant souvent inaccessibles les solutions exactes.
+	
+		\subsection{Existence de solution}	
+	\subsubsection{Rappel des théorèmes classiques}
+	\label{th:classique}
+	\begin{thm}[Théorème de Cauchy-Lipschitz]  \
+		
+		Soit ${f}: \R\times \R^n\textrightarrow\R^n$	lipschitzienne en $y$ uniformément en $t$, alors pour toute condition initiale $(t_0, y_0)$, l'EDO : 
+		\begin{equation}\label{f:cauchy}
+			\begin{cases}
+				y'(t) = {f}(t,y), \\
+				y(t_0) = y_0
+			\end{cases}
+		\end{equation}			
+		admet une solution unique maximale \textbf{(Pujo, 1918)}.
+	\end{thm}
+	\begin{thm}[Théorème de Carathéodory] \ 
+		
+		Soit l'EDO \eqref{f:cauchy} où ${f} : \left[t_0, t_1\right]\times \R^n \textrightarrow \R^n $.	\\ Si ${f} $ est mesurable en $t$ pour tout $y$, continue en $y$ pour tout $t$ et majorée par $\mathrm{m}(t)$ c'est-à-dire : $||{f}(t,y)|| \leq m(t)\text{ avec } \mathrm{m}\in {L}^1$. 
+		Alors il existe une solution absolument continue  \textbf{(Filippov, 1988)}. 					
+	\end{thm}
+	
+\textbf{Remarque : } Le théorème de Cauchy-Lipschitz permet de montrer l'existence de solution pour des EDO régulières. Alors que le théorème de Carathéodory quant à lui permet d'obtenir des solutions pour des EDO discontinues.   	
+\subsubsection{Système de Filippov}
+Efficace lorsque le système présente des discontinuités dans sa dynamique. Il permet de contourner les points où l'existence n'est pas vérifiée. Car le théorème de Cauchy-Lipschitz ou de Carathéodory échoue.
+\subsubsection*{Inclusion de Filippov} 
+Considérée comme une extension des deux autres, elle est plus adapté aux points de discontinuité des systèmes hybrides. Supposons que l'EDO \eqref{f:cauchy} est discontinue avec ${f}$ une fonction mesurable.
+\begin{thm}[Théorème de Filippov] \
+	
+	Si ${f}$ est borné et la discontinuité se produit sur une surface $N$ de classe $C^1$, alors l'inclusion différentielle : 
+	\begin{equation}\label{f:filippov}
+		y' \in F(y) = \bigcap_{\delta >0} \overline{co} \left({f}\left(B_{\delta}(y)  \right) \backslash N \right)
+	\end{equation}
+	admet une solution absolument continue $y(t)$ vérifiant $y'(t) \in F(y(t))$ presque partout. Où $\overline{co} $ est une enveloppe convexe fermée, $B_{\delta}$ définit la boule de rayon $\delta \text{ et de centre }y$, et $N$ est un ensemble de mesures nul \textbf{(Filippov, 1988)}.  
+	\end{thm}
+	
+	\begin{cor}
+		Si la surface de discontinuité $N = 0 $, la dynamique devient : 
+		\begin{equation}
+			y' = a{f}^+(y)+ (1-a){f}^-(y), \quad a \in \left[0, 1\right] 
+		\end{equation}
+		avec ${f}^{\pm} $ les limites de ${f}$ de part et d'autre de $N$.
+	\end{cor}
+	
+%	\begin{exam}
+%		Soit le système scalaire défini par:  
+%		\begin{equation*}
+%			y' = -\mathrm{sign}(y), \quad \text{ avec } :  \mathrm{sign}(y) =\begin{cases}
+%				1 & \text{ si }y >  0 , \\
+%				-1 & \text{ si }y  < 0.
+%			\end{cases}
+%		\end{equation*}
+%		%		Par définition la fonction $\mathrm{sign}(y)$ est discontinue en $y = 0$ c'est-à-dire on a un saut de -1 à 1. \
+%		
+%		\begin{itemize}
+%			\item ${f}$ est discontinue en $y \Longrightarrow {f}$ n'est pas lipschitzienne, donc le théorème de Cauchy-Lipschitz et de Carathéodory ne sont pas vérifiés. 
+%			\item Soit l'inclusion différentielle 
+%			: \begin{equation*}
+%				y' \in F(y), \quad \text{ où } F(y) = \begin{cases}
+%					\left\{{-1} \right\} \text{ si }y >  0, \\
+%					\left[-1, 1\right] & \text{ si }y =  0, \quad \text{(enveloppe convexe des limites)} \\ \left\{{1}\right\} & \text{ si }y <  0.
+%				\end{cases}
+%			\end{equation*} 
+%			d'où d'après le théorème de Filippov, on a : $y' \in \left[-1, 1\right] \text{ si }y = 0$.\\
+%			Donc les solutions convergent en temps fini vers $y=0$.  		 			
+%		\end{itemize}
+%	\end{exam}	
+Lorsque les surfaces sont non-linéaires la détermination de $F(y)$ devient très rébarbative dans le cas de Filippov, et difficile à généralisé dans le cas des systèmes avec changement d'état. 
+
+	\subsection{Résolution analytique des systèmes hybrides d'EDO }
+%	\subsection{Introduction}
+La résolution analytique des équations différentielles ordinaires (EDO) n’est pas toujours facile. Elle devient souvent complexe, voire impossible, surtout lorsque l’EDO décrit la dynamique continue du système hybride.  
+Malgré ces difficultés, l’étude des méthodes analytiques reste essentielle pour la compréhension des systèmes. En effet, elle permet de mieux saisir le comportement général des solutions, de garantir certaines propriétés globales (comme les théorèmes de Lyapunov ou de Cauchy-Lipschitz), et de valider les simulations numériques en fournissant des solutions de référence pour des cas tests.
+
+	\subsubsection{Rappels}
+	\label{sub: maedo}
+	%		\begin{nb}
+		%		Dans cette partie, l'étude de l'existence et l'unicité des solutions n'étant pas notre objectif.
+		%		Sauf mention contraire, nous supposons que nos EDO existent et admettent des solutions uniques sur un intervalle $I$ bien définie de $\R$. 
+		%	\end{nb}
+%	\subsubsection{Rappels}
+	
+Les méthodes analytiques de résolution d'EDO, font recours à des techniques d'intégration, des transformations, ou de séparation de variable selon la nature de l'équation.
+\begin{enumerate}
+	\item {Méthode de séparation des variables} elle concerne les EDO d'ordre 1, le principe consiste à séparer les termes dépendant de $t$ et de $y$ en l'écrivant sous la forme : $b({y}){y'}(t) = a(t)$. La solution est obtenue directement en intégrant chaque côté par rapport à sa variable d'intégration. 
+	\item {Méthode des facteurs intégrants} c'est une méthode très pratique pour la résolution analytique des EDO linéaire du premier ordre qui se présente sous la forme suivante : 
+	\begin{equation} \label{fac}
+		y'+ p(t)y = q(t)
+	\end{equation}
+	L'idée générale est de multiplier \eqref{fac} par le facteur intégrant $\mu(t) = \exp\int p(t)dt$ pour rendre l'équation intégrable. Si $\mu(t)$ est connu la solution de l'équation dévient \\ $\int\mu(t)\cdot q(t)dt$. La complexité dépendra de l'expression de $p(t) \text{ et de } q(t)  $.
+		%		 		\item Il existe encore plusieurs d'autre comme, la méthode de changement de variable, la méthode des séries de Taylor, etc. La liste étant non exhaustive pour plus de méthode voir \textbf{(Hairer \textit{et al} 1987)}, pour ce qui nous concerne on se limitera aux deux premiers qui nous servira dans la suite.
+	\end{enumerate}
+	%			\subsubsection{Limites}
+	%		Ces approches fonctionnent bien dans les cas linéaires ou faiblement non linaires. Toutefois elles montrent leurs limites dès lors que l'on est confronté à des systèmes hybrides, marqué par une discontinuité dans la dynamique ou par un changement de régime.  
+	%	
+	
+%	\subsection{Résolution analytique des systèmes hybrides d'EDO}
+%	En raison de leur double nature, les systèmes hybrides d'EDO posent un défi particulier aux méthodes analytiques classiques. Une solution continue au sens classique peut ne pas exister sur tout le domaine, ou ne pas être définie de manière globale.
+	
+	\subsubsection{Méthodes par morceaux}
+Le principe consiste à subdiviser le domaine en sous-intervalles $I_k$, avec $k \in \mathbb{N}$, sur lesquels le système est régulier.  
+Sur chaque sous-intervalle $I_k$, on résout l’équation différentielle ordinaire (EDO) correspondante à l’aide des méthodes analytiques (voir \eqref{sub: maedo}).  
+Les solutions obtenues sont ensuite raccordées en prenant en compte les conditions de transition entre les différentes phases du système.
+
+	
+	Soit le système hybride d'EDO suivant : 
+	\begin{equation}
+		\begin{cases}
+			y'(t) = {f}_{q_k}(y(t)), & t \in \left[ t_k, t_{k+1}\right), \\
+			y(t_k) = y_k
+		\end{cases}
+	\end{equation}
+	On résout l'EDO pour $k = 1, 2, ...$ et à $t = t_{k+1}$ on applique la condition de transition \\$y(t^+_{k+1}) = R(y(t^-_{k+1}))$.
+	
+%	\begin{exam}{ Chauffage d'une pièce }\
+%		
+%		Considérons une pièce munie d'un chauffage électrique qui fait varier la température de la pièce en fonction du temps. Un thermostat active le chauffage si la température descend en dessous de $T_{\text{min}}$ et le désactive quand elle dépasse $T_{\text{max}}$. Ceci peut être modélisé par : \\
+%		Soit le SH$-$EDO : \begin{equation*}
+%			\begin{cases}
+%				T' = a(T_r - T), & \text{ mode ON}, \\
+%				T' = -b(T - T_e), & \text{ mode OFF}.
+%			\end{cases}
+%		\end{equation*} 
+%		Où : $a, b $ le coefficient de chauffe/refroidissement, $T_r$: la température du radiateur, $T_e$: la température extérieure et $T(t)$: la température de la pièce.\
+%		
+%		On suppose que: \begin{itemize}
+%			\item Si $T(t) \geq T_{\text{max}} \textrightarrow$ passage à OFF \\
+%			\item Si $T(t) \leq T_{\text{min}} \textrightarrow$ passage à ON
+%		\end{itemize}
+%		\textbf{Résolution par morceaux} 
+%		Supposons que $T(0) = T_0  \leq T_{\text{min}}$, donc on démarre en mode ON.
+%		\begin{enumerate}
+%			\item \textbf{mode ON : } $T' = a(T_r - T) \Longrightarrow T(t) = T_r + (T_0 - T_r )e^{-at}$.
+%			\item \textbf{Transition $t_1$: } si on suppose qu'on atteint $T_{\text{max}}$ à un instant $t_1$ c'est-à-dire à $T(t_1) = T_{\text{max}}$ le thermostat coupe. \begin{equation*}
+%				T_{\text{max}} = T_r + (T_0 - T_r )e^{-at_1} \Longrightarrow t_1  = -\frac{1}{a}\ln(\frac{T_{\text{max}} - T_r}{T_0 - T_r})
+%			\end{equation*}
+%			\item \textbf{Mode OFF : } A $t_1$ le chauffage s'éteint, et on bascule dans le second régime \\  $T' = -b(T - T_e) \Longrightarrow T(t) = T_e + (T_{\text{max}} - T_e )e^{-b(t - t_1)}$, on résout jusqu'à un instant $t_2$ ou la température est minimale. À cet instant \begin{equation*}
+%				T_{\text{min}} = T_e + (T_{\text{max}} - T_e)e^{-b(t_2 - t_1 )} \Longrightarrow t_2 = t_1 -\frac{1}{b}\ln(\frac{T_{\text{min}} - T_e}{T_{\text{max} -  T_e}})
+%			\end{equation*}
+%			\item  Ainsi de suite...  
+%		\end{enumerate}  
+%		Donc la solution globale du système est: 
+%		\begin{equation*}
+%			T(t) = 
+%			\begin{cases}
+%				T_r + (T_0 - T_r)e^{-at} & \text{mode ON}, \\
+%				T_e + (T_{\text{max}} - T_e)e^{-b(t-t_1)} & \text{mode OFF}\\
+%				\text{etc.} & \text{... }
+%			\end{cases}
+%		\end{equation*}
+%	\end{exam}
+	
+
+%	\subsection{Conclusion}	 
+La méthode par morceaux nécessite une connaissance précise des points de transition et des conditions de raccordements, ce qui n'est pas toujours le cas. Face à ces différentes limites, l'utilisation des méthodes numériques devient indispensable afin de gérer au mieux les événements et les surfaces géométriques lors du changement de régime. 
+	
+	\subsection{Méthodes de résolution numériques des systèmes hybrides EDO}
+	 Les méthodes numériques contournent les problèmes de la non-linéarité, et les difficultés analytiques. Elles sont plus efficaces que les méthodes analytiques dans des cas complexes.
+	\subsubsection*{Méthodes numériques classiques pour les EDO}
+	Les méthodes de résolution numériques des systèmes hybrides reposent sur celle des EDO. 
+	\begin{enumerate}
+		\item {La méthode d'Euler}.\
+		
+		Soit le problème de Cauchy définit par : 
+		\begin{equation}\label{ex:cau}
+			\begin{cases}
+				y'(t) = f(t,y(t)), \\
+				y(t_0) = y_0.
+			\end{cases}
+		\end{equation}
+		Soit $\alpha$ un entier non nul, N un sous-intervalle finis de $[0, \alpha]$ et $h = \alpha/N$ le pas.
+		On suppose que $f$ est localement lipschitzienne par rapport à $y$ la solution maximale de \eqref{ex:cau}. 
+		
+		\begin{itemize}
+			\item {Euler explicite} \textbf{(Gallouët \textit{et al}., 2002)}.
+			
+		Le schéma explicite d'Euler est obtenu par une approximation du développement de Taylor de premier ordre et facile à implémenter. Connaissant $y_0$ on calcul, pour $n = 0, 1, ... , N-1$ 
+\begin{equation}
+	\label{f:eulerexplicite}
+	y_{n+1} = y_n + h \cdot f(t_n, y_n),
+\end{equation}
+			
+%			\begin{defn}
+%				Soit l'EDO \eqref{ex:cau} et $\alpha$ un entier non nul, pour déterminer la solution $y$ on subdivise l'intervalle $\left[0,\alpha\right]$ en N sous-intervalles finis. On pose $h= \alpha/N \text{ et } y_n = nh $ pour $n \text{ allant de } 0 \text{ à } N $. d'après le développement de Taylor, on a: 
+%				\begin{equation}
+%					\frac{y_{n+1}- y_n}{h} = \underbrace{f (t_n, y_n)}_{y'_n} + \epsilon_{n}
+%				\end{equation}
+%				Où $\epsilon_{n}$ est appelé erreur de consistance. \\ Ainsi la méthode d'Euler explicite approxime la solution par : 
+%				\begin{equation}
+%					y_{n+1} = y_n + h \cdot f(t_n, y_n),
+%				\end{equation}
+%				Où $h$ est le pas de discrétisation, et $(t_n, y_n)$ sont les approximations aux points $y_n = y_0 + n h$.
+%			\end{defn}
+			%	À partir de $y_0$ qui est connu, on calcule ainsi tous les $y_n, n \text{ allant de } 0 \text{ à } N$.
+			%	\begin{figure}[H]
+				%		\centering
+				%		\includegraphics[width=0.6\linewidth]{im4}
+				%		\caption{tracé du champ des pentes F}
+				%		\label{fig:im4}
+				%	\end{figure}
+			
+			\item {Euler implicite} \textbf{(Gallouët \textit{et al}., 2002)}.
+			
+			Le schéma implicite est une amélioration du schéma explicite à l'aide de la forme intégrale du problème de Cauchy
+%			\begin{equation}
+%				y_{n+1} = y_n + \int_{t_n}^{t_{n+1}} f(s, y(s))ds
+%			\end{equation}
+			et de la formule des trapèzes. 
+%			\begin{equation}
+%				y_{n+1} = y_n + \frac{h}{2} \left[\underbrace{f(t_n, y_n) }_{y'_n}+ \underbrace{f(t_{n+1}}_{y_{n+1}}, y_{n+1})\right] + \tilde{\epsilon_{n}}
+%			\end{equation}
+%			avec $\tilde{\epsilon_{n}}$ l'erreur de consistance tel que $\tilde{\epsilon_{n}} < \epsilon_{n} \text{ quand } h\textrightarrow 0 $, nous obtenons le schéma suivant :
+			\begin{equation}
+				\label{f:eulerimplicite}
+				y_{n+1} = y_n + hf(t_{n+1}, y_{n+1})).
+			\end{equation}
+			Ce schéma est plus précis mais nécessite la résolution de l'équation a chaque pas.
+			
+			%	\begin{exam}[Cas simple et représentation graphique ] \textbf{(Gallouët, 2022)}
+				%		Soit le problème de Cauchy suivant : \begin{equation*}
+					%			\begin{cases}
+						%				T'(y) = -\sqrt{T(y)}, \\
+						%				T(0) = 1
+						%			\end{cases}
+					%		\end{equation*}
+				%		\begin{itemize}
+					%			\item Par intégration direct la solution exacte est : $\begin{cases}
+						%				T(y) = \left(1 - \frac{y}{2}\right)^2, & \text{pour } y \leq 1/2 \\
+						%				T(y) = 0, & \text{pour }y> 1/2.
+						%			\end{cases}$ 
+					%			\item Schéma explicite : $T_{n+1} = T_n - h\sqrt{T_n}, \qquad \text{ pour } T_n \geq 0 $ 
+					%			\item  Schéma implicite : $T_{n+1} = T_n - h\sqrt{T_{n+1}}, \qquad \text{ pour } T_n > 0 $
+					%		\end{itemize}
+				%		Pour un pas de temps $h = 3/10$ on observe  : 
+				%		\begin{figure}[H]
+					%			\centering
+					%			\includegraphics[width=0.6\linewidth]{im5}
+					%			\caption{Représentation des solutions : exacte, explicite, implicite.}
+					%			\label{fig:im5}
+					%		\end{figure}
+				%	\end{exam}
+		\end{itemize}
+		
+		\item {Schéma de Heun}.\
+
+		Encore une amélioration du schéma implicite d'Euler, en remplaçant dans l'équation \eqref{f:eulerimplicite}, $y_{n+1}$ par son l'expression explicite \eqref{f:eulerexplicite} on obtient : \begin{equation}
+			y_{n+1} = y_n + \frac{h}{2}(f(t_n, y_n) + f(t_{n+1}, y_n + hf(t_n, y_n)))
+		\end{equation}
+		Ce schéma est un schéma explicite similaire au schéma implicite d'Euler par l'erreur de consistance. \textbf{(Gallouët \textit{et al}., 2002)}
+		
+		\item {Méthode de  Runge-Kutta d'ordre 4 (RK4)}.\
+		
+	Les méthodes de Runge-Kutta sont une généralisation de la méthode du point milieu donnée par : \begin{equation}
+		T'(y_n) \approx \frac{T_{n+1} - Y_n }{h}= F (y_n, T_n)
+	\end{equation}
+	Pour $N$ points intermédiaires de coordonnées $(t_{n+i}; y_{n+i})$, la pente est définie par : $	k_{n+i} = f(t_{n+i};y_{n+i})$
+	Où les $y_{n+1} $ sont construites de manière itérative selon l'approximation :
+	\begin{equation}
+		y_{n+1} = y_{n} + h\sum_{j=1}^{q}b_{j}k_{n,j}.
+	\end{equation}
+	Ainsi la méthode de Runge-Kutta à 3 points intermédiaire ($q=4$) se calcul par l'algorithme suivant : 
+		\begin{equation}
+			\begin{cases}
+				k_1= h f(t_n, y_n), \\  
+				k_2 = h f(t_n +\frac{ h}{2}, y_n + \frac{1}{2}K_1), \\  
+				k_3 = h f(y_n +\frac{ h}{2}, y_n + \frac{1}{2}K_2), \\  
+				k_4 = h f(t_n + h, y_n + k_3), \\  
+				t_{n+1} = t_n + h, \\ 
+				y_{n+1} = y_n + \frac{1}{6}(k_1 + 2k_2 + 2k_3 + k_4).
+			\end{cases}
+		\end{equation}  
+		C'est un schéma stable, précis et adaptable a plusieurs types d'équation.
+	\end{enumerate}
+%	\subsubsection{Tableau comparatifs et limites des méthodes classiques}
+	%		\begin{table}[H]  
+		%			\centering  
+		%			\caption{Comparaison des méthodes classiques de résolution d'EDO}  
+		%			\begin{tabular}{|l|c|c|c|}  
+			%				\hline  
+			%				\textbf{Méthode} & \textbf{Précision} & \textbf{Stabilité} & \textbf{ Calcul} \\  
+			%				\hline  
+			%				Euler Explicite &(faible) $\mathcal{O}(h)$ & Très instable & Faible \\  
+			%				Euler Implicite &(moyenne) $\mathcal{O}(h^2)$ & stable & Moyen  \\  
+			%				RK4 &(excellente) $\mathcal{O}(h^4)$ & Bonne (pour un bon $h$) & Élevé\\  
+			%				\hline  
+			%			\end{tabular}  
+		%		\end{table} 
+Le tableau comparatif des méthodes classiques, présenté ci-dessous, est donné par le \textbf{Tableau~I}.  
+Bien que ces méthodes soient efficaces dans des cas simples, elles présentent des limitations importantes lorsque le système dynamique devient complexe. Ces difficultés s'accentuent davantage en présence d’une hybridation du système.
+
+
+	\begin{landscape}
+	\begin{table}[] 
+		\Huge 
+		\label{tab:tableau comparatif}
+		\centering  
+		\caption{Comparaison des méthodes classiques de résolution d'EDO}  
+		\begin{tabular}{@{}lrrr@{}}  
+			\toprule  
+			\textbf{Méthode} & \textbf{Précision} & \textbf{Stabilité} & \textbf{Coût Calcul} \\  
+			\hline  
+			\midrule
+			Euler Explicite &(faible) $\mathcal{O}(h)$ & Très instable & Faible \\  
+			Euler Implicite &(moyenne) $\mathcal{O}(h^2)$ & stable & Moyen  \\  
+			RK4 &(excellente) $\mathcal{O}(h^4)$ & Bonne (pour un bon $h$) & Élevé\\  
+			\bottomrule  
+		\end{tabular}  
+	\end{table} 
+\end{landscape}
+
+\subsubsection{Méthodes numériques adaptées aux systèmes d'EDO hybrides}
+Le système rencontre des problèmes particuliers lorsque des événements discrets sont ajoutés dans la dynamique continue. Ces particularités sont principalement liées à la présence de discontinuités et de transitions de régime. D'où la nécessité des méthodes adaptées telle que : 	
+
+\subsubsection{Méthode basée sur les schémas classiques de résolution d'EDO}
+À condition d'intégrer manuellement les mécanismes de gestion des discontinuités, les méthodes de résolution d'EDO présenté ci-dessus, peuvent être efficaces dans la résolution numérique des systèmes hybrides. Cette nouvelle approche est très sensible aux erreurs de détection et nécessite un pas de temps adéquats autour des points de transition.
+\begin{itemize}
+	
+	\item[$\bullet$] {Principe mathématique : } Dans l'algorithme de ces méthodes classiques, on introduit : 
+	\begin{itemize}
+		\item Des fonctions $g(y(t)) = 0 $ permettant de surveiller continûment les conditions de commutation. 
+		\item Des conditions "if-else" qui réduire automatiquement la pas $h$ près des discontinuités, c'est-à-dire : $h \textrightarrow h/10 \text{ quand } |g(y(t))< \epsilon|$
+		\item Enfin toujours a l'aide des conditions basculer entre les régimes ${f}_q \textrightarrow f_{q'}$.
+	\end{itemize}
+
+
+		
+%		\item[$\bullet$] {Exemple : }Considérons l'exemple \eqref{ex:metho} de la pièce munie du chauffage électrique. 
+		
+		%		Supposons qu'une plaque est chauffée jusqu'à atteindre 373K, au-delà la convection devient dominante. Avec RK4, on intègre en surveillant la température. Si $T<373K$, (Mode A) et si $T\geq 373\,\mathrm{K}$ (Mode B) selon le système suivant : 
+		%		\begin{equation*}
+			%			\begin{cases}
+				%				T'(t) = 0.1*(400 - T), & T< 373 \quad \text{Mode A}, \\
+				%				T'(t) = -0.05*(T-300), &  T \geq 373 \quad \text{Mode B}. 
+				%			\end{cases}
+%		\end{equation*}
+%On peut introduit une boucle While qui nous permet de basculer entre le mode A et B selon la condition de transition. Et une condition if [$T(t) - T^* <\epsilon$] qui permet de détecter l'instant de la transition et la mettre à jour à chaque itération. 
+
+%	\item[$\bullet$] {Implémentation :} 
+% 
+%	\noindent
+%	\begin{lstlisting}[style=pythonstyle]
+%		def mode_ON(T, t): return -a(T - T-e) + P def mode_OFF(T, t): 	return -b(T - T-e) 
+%		T_initial = 285, t_final = 100, h = 0.1, temp_transition= 313
+%		T = T_initial, t = 0, results = []
+%		while t < t_final:
+%		current_eq = mode_ON if T < transition_temp else mode_OFF
+%		if (T < transition_temp) != (T_new < transition_temp):
+%		print(f"Transition détectée autour de t = {t:.2f}s")
+%		T = T_new, t += h
+%		results.append((t, T))
+%	\end{lstlisting}	
+		\end{itemize}
+		
+		
+	\subsubsection{Méthode avec évènements explicites " Event-Driven "}
+%	Contrairement à la méthode précédente, la méthode Event-Driven permet de déterminer exactement l'instant de transition. Mais sa bonne précision la rend plus couteuse s'il y a plusieurs saut.   
+La méthode consiste à considérer les transitions comme des entités discrètes explicites, permettant de distinguer les différentes phases. Cette approche est autant précise sur les transition que coûteuse s'il y a plusieurs sauts. \textbf{Ascher et Petzold (1998)}
+\begin{itemize}
+	\item[$\bullet$] {Principe mathématique : } Présenté par la figure \ref{fig:im141}-Annexe II\\
+	À l'aide des méthodes classiques, on intègre l'équation active jusqu'à détecter un événement $g(y(t))  = 0 $ a un instant $t^*$. Si $t^*$ est atteint on arrête l'intégration, et on applique les règles de transition : $q^+ = h(q^-), \quad x^+ = R(x^-)$. On reprend l'intégration avec l'équation suivante, et ainsi de suite...
+			%					\begin{equation}
+				%						q^+ = h(q^-), \quad x^+ = R(x^-)
+				%					\end{equation}
+			
+	
+		%			\item[$\bullet$] \textbf{Schéma explicatif :  } (Voir Image \ref{fig:im141}-Annexe III)
+		%			\begin{figure}[H]
+			%	\centering
+			%	\includegraphics[width=0.7\linewidth]{im14_1}
+			%	\caption{Schéma du "Event-Driven"}
+			%	\label{fig:im141}
+			%\end{figure}
+			
+%		\item[$\bullet$] {Exemple :} avec l'exemple précédent, la transition est détecter par la différence de \\ $T-T^* = 0 $, une fois détecté, on arrête l'intégration et on résout $T(t) = T^*$.
+%		\item[$\bullet$] {Implémentation :} Méthode Event-Driven. 
+%		
+%			\noindent
+%			\begin{lstlisting}[style=pythonstyle]
+%				def dyn_system(t, T):
+%				 return mode_ON(T, t) if T < temp_transition else mode_OFF(T, t)
+%				def event(t, T):
+%				return T - temp_transition  
+%				event.terminal = True 
+%				sol = solve_ivp(dyn_system, [0, t_final], [T_initial], events=event, max_step=h)
+%				print(f"Transition exacte à t = {sol.t_events[0][0]:.4f}s")
+%			\end{lstlisting}
+	\end{itemize}
+		
+		\subsubsection{Méthode de pénalisation} 
+		Cette approche gère les discontinuités automatiquement en introduisant des fonctions lisses et différentiables entre les différents modes, de sorte à passer d'une dynamique à une autre. Elle a une meilleure stabilité, mais le système devient plus complexe à interpréter physiquement.  
+		
+		%			\item[$\bullet$] \textbf{exemple mathématique : } Les discontinuités et sauts sont approximées (e.x : $\text{ sign}(y) \approx \tan(\frac{y}{\epsilon})$ avec $\epsilon \textrightarrow 0 $) et pour un  saut ($y^+ = y^- \Longrightarrow y^+ = y^- +  {(2x^- - x^-)} / {1+\exp(-t/\epsilon)}, \epsilon \textrightarrow 0$) 
+		%			\item \textbf{Définition d'une fonction approximée }
+		%			\noindent
+		%			\begin{lstlisting}[style=pythonstyle]
+			%				def liss_sign(x, eps=1e-3):
+			%				return np.tanh(x/eps)
+			%			\end{lstlisting}
+%	{Exemple : } avec l'exemple précédent, afin d'adoucir les sorties, on peut définir une fonction "douce" comme suit : 
+%		\begin{lstlisting}[style=pythonstyle]
+%			def doux_dyn(t, T):
+%			chi = 0.5*(1 + np.tanh((T - temp_transition)/5)) 
+%			return (1-chi)*mode_A(T, t) + chi*mode_B(T, t)
+%		\end{lstlisting}
+		
+		
+%		\subsubsection{Méthodes IMEX ( implicite-explicite)}
+%		
+%		C'est une combinaison parfaite des schémas implicites prévus pour les discontinuités et de schéma explicite pour les parties lisses introduit par \textbf{Ascher et Petzold (1998)}. Cette approche est coûteuse avec une stabilité inconditionnelle, défini par : 
+%		\begin{equation}
+%			y_{n+1} = y_n + \left(\underbrace{{f}_{\text{im}}(y_{n+1})}_{\text{Euler implicite}} + \underbrace{{f}_{\text{ex}}(y_n)}_{\text{Euler explicite}}\right)
+%		\end{equation}
+		
+		
+%		\subsubsection{Conclusion}
+%		La résolution numérique des systèmes hybrides d'EDO, est une extension des méthodes classiques de résolution des EDO qui présente chacune des limites. Donc l'effet additionnel des transitions et des changements régimes mal contrôlés rend plus ardues ces méthodes.\ %qui avait déjà du mal à s'en sortir seule.\
+		
+		Toutes ces méthodes bien que robustes atteignent rapidement leurs limites en cas de transition mal posée, ou de non-linéarité forte. C'est dans ce contexte qu'émerge de nouvelle approches issue de l'apprentissage automatique. Les réseaux de neurones physiquement informés (PINNs) qui proposent des alternatives innovantes pour approximer les solutions des systèmes hybrides complexes.\
+		
+%		Mais bien avant de passer a cette approche dans le chapitre suivant nous étudieront dans les détails un modèle de feu modélisé sous forme de système hybrides d'EDO, en tentant de trouver des solutions analytiques et/ou numériques avant d'appliquer les PINNs au chapitre 3.
+
+\section{Réseaux de neurones physiquement informés (PINNs)}
+
+		\subsection*{ Bref historique}
+	Introduit par John McCarthy en 1956 l'intelligence artificielle est un domaine qui révolutionne aujourd'hui notre monde. Elle permet de créer des machines capables de reproduire le comportement humain. C'est le cas de l'apprentissage automatique, introduit en 1959 par Arthur Samuel. Cette machine capable, d'apprendre d'elle-même seulement juste à partir des données, est composé de plusieurs sous-domaines parmi lesquels nous avons l'apprentissage profond (DL). Introduit par Yann LeCun 1980, Les DL s'appuient sur les réseaux de neurones pour traiter des données complexes. \textbf{Hornik et White (1980)} introduisent, à partir de l'apprentissage profond, la notion de réseaux de neurones profonds.  
+	Ces réseaux sont devenus des outils puissants pour approximer des fonctions universelles.  
+	Ils peuvent résoudre des EDO et EDP complexes avec conditions initiales et/ou limites.  
+	Leur application en physique, connue sous le nom de PINNs, permet d’obtenir des solutions continues et différentiables.  
+	Une vue d'ensemble de cette hiérarchie est donnée par la figure \eqref{fig:im9} -- Annexe II.
+				
+		\subsection{Structure générale des PINNs}
+Les réseaux de neurones physiquement informés (PINNs) sont conçus pour résoudre des équations différentielles (EDO/EDP) complexes, et des problèmes inverses en intégrant des lois physiques dans la fonction de perte (loss) du réseau. Sans maillage préalable, elle permet d'approximer la solution de l'équation à l'aide d'un réseau de neurones. Ce réseau entraîne le modèle à partir d'une structure générale qui se présente sous la forme de la figure \eqref{fig:im17}. Cette structure est composée de la loss et de trois couches principales qui sont la couche d'entrée, les couches cachés et la couche de sortie comme présenté par la figure \eqref{fig:im17}. La couche d'entrée, elle prend en compte toutes les variables indépendantes du problème fournies au réseau ($x_1, x_2$). Ses variables sont transmises par des connexions vers les couches cachées qui transforment les entrées à l'aide des poids $w_j$, biais $b_j$ et des activations $tanh, ReLu, etc. $ du réseau selon la relation $h_j = \text{activation} (w_j\cdot x_j + b_j)$. Chaque connexion applique cette transformation avant de transmettre les données à la couche de sortie.  
+Cette dernière prédit la solution physique, qui servira ensuite au calcul des résidus dans la fonction de perte.  
+Le réseau est entraîné en minimisant une fonction de perte, composée des résidus de l’équation et des conditions imposées.
+ \\	 
+\textbf{NB : } les ronds représentent les nœuds des couches, et les traits représentent les connexions. Chaque connexion est munie d'un poids et d'un biais qui permet d'ajuster les entrées.
+
+		\subsection{Principe mathématique des PINNs}
+	
+	Pour une équation différentielle ordinaire de la forme $u'(t) = f(u(t))$. Le principe général des PINNs est de construire un réseau de neurones $\hat{u}(t, \theta)$ qui approxime la solution $u(t)$ de cette équation, en minimisant la fonction de perte $\mathcal{L}(\theta)$ pendant l'entraînement du modèle, où $\theta$ représente l'ensemble des poids et biais du réseau.
+	
+	\subsection{Formulation complète du modèle}
+	La formulation physique du modèle de référence définit par l'équation \eqref{f:conservation} peut-être formulé mathématiquement par un système $S(y, T)$, divisé en deux sous-problèmes SP1 et SP2. SP1 modélise la variation de la température $T$ en fonction de $y$ (régime 1) et SP2 modélise l'évaporation de l'humidité $M_w$ en fonction de $y$ (régime 2).
+		\subsubsection*{Formulation mathématique}
+	\begin{enumerate}
+		\item Soit la variable $y \in Y = \left[0, a\right]$ désignant la distance entre la flamme et un élément combustible de longueur $dy$, et $R$ un paramètre à déterminer.
+		
+		\item Soient les fonctions : $T(y) \in \left[ T_0, T_{\text{max}} \right] $, \text{ } $M_w(y) \in \left[M_0, M_{\text{max}}\right], \text{ }Q_1(y, T(y)) \text{ et } Q_2(y, T(y)) $. \\
+		avec $Q_1(y, T(y)) = q_{\text{cs}}+ q_{\text{ci}}+q_{\text{rs}}+q_{\text{ri}}+q_{\text{cs}}+q_{\text{pr}}$, \text{ }pour $T\neq 373\, \mathrm{K}$, et \\
+		$Q_2(y, T(y)) = Q_1(y, 373) = Q_2(y)$, \text{ }pour $T = 373\,   \mathrm{K}$.
+		
+		\item Les conditions initiales on suppose que, pour  $ y = a; \text{ } T(a) = T_a \text{ et } M_w(a) = M_a$.
+	
+	\begin{landscape}
+		\begin{figure}
+			\Huge
+			\centering
+			\includegraphics[width=1.1\linewidth]{im17}
+			\caption[Structure de la résolution d'équation à l'aide des PINNs]{Structure générale de la résolution des équations différentielles à l'aide des PINNs}
+			\label{fig:im17}
+		\end{figure}
+	\end{landscape}
+
+		\item Les deux sous-problèmes SP1 et SP2 : 
+\begin{itemize}
+	\item[$\bullet$] Pour $T \neq 373\,\mathrm{K}$, on a : 
+	\begin{equation}
+		\label{SP1}
+		SP1 : 
+		\begin{cases}
+			\frac{dT}{dy} = - \frac{Q_1(y, T(y))}{\gamma_1R}, & T\neq373\,\mathrm{K}, \\
+			\frac{dT}{dy} = 0, & T = 373\,\mathrm{K},\\
+			T(a) = T_{a}, & \text{ quand } y = a. 
+		\end{cases}
+	\end{equation}
+		\item[$\bullet$] Pour $T = 373\,\mathrm{K}$, on a : 
+		\begin{equation}
+			\label{SP2}
+			SP2 : 
+			\begin{cases}
+				\frac{dM_w}{dy} = \frac{Q_2(y)}{\gamma_2R}, & T = 373\,\mathrm{K}, \\
+				\frac{dM_w}{dy} = 0, & T \neq 373\,\mathrm{K},\\
+				M_w(a) = M_{a}, & \text{ quand } y = a. 
+			\end{cases}
+		\end{equation}
+	\end{itemize}
+	\item L'expression des flux $Q_1 \text{ et } Q_2$ dépend de la configuration \eqref{fig:im6} (vent/pente).
+	\begin{itemize}
+		\item[$\bullet$] Pour les feux du type heading (La flamme est aidée par le vent.) on a : 
+		\begin{align}
+			Q_1(y,T(y)) \notag&= \alpha_1 \left(1-\frac{ya-b}{\sqrt{1+(ya-b)^2}}\right) + \alpha_2e^{-ry}
+			+ \alpha_3\left(T^4(y) - T_\infty^4\right)\\ & + \frac{\alpha_4}{y^{1/2}}(T_{fl} - T(y))e^{-cy} + \alpha_6(T_b-T(y))e^{-ry}
+		\end{align}
+		\item[$\bullet$] Pour les feux du type backing (Le vent est opposé à la flamme.) on a :
+		\begin{align}
+			Q_1(y,T(y)) \notag&= \alpha_1 \left(1-\frac{ya-b}{\sqrt{1+(ya-b)^2}}\right) + \alpha_2e^{-ry}
+			+ \alpha_3\left(T^4(y) - T_\infty^4\right)\\ & + \left(\frac{\alpha_5}{(L_{fb}-y)^{1/2}}+ \alpha_7\right) 
+			\left(T_\infty - T(y)\right)
+		\end{align}
+	\end{itemize}
+Où  $a, b, c, r, \gamma_1, \gamma_2 \text{ et les } \alpha_i $ sont des constantes regroupant plusieurs paramètres physiques de l'équation \eqref{f:conservation} leurs expressions sont données en Annexe I \\
+%\ref{chp:annexe I}
+\textbf{NB : } Dans la suite, on suppose que nous sommes dans une configuration heading. 
+
+\end{enumerate}
+%		\subsection{Rappel de la nature du système}
+%		D'après le chapitre précédent le modèle de feu de propagation étudié par \textbf{Koo \textit{et al}, (2005)}, est un système dynamique hybride à transition de régime conditionnelle $T= 373\,\mathrm{K}$ gouverné par deux régimes SP1 et SP2 sur un paramètre spatial $Y = [0, a]$ tel que : \begin{itemize}
+%			\item[$\bullet$] SP1 modélise l'évolution de la température $T(y)$ à $T\neq373\,\mathrm{K}$ selon l'EDO :\\  $\frac{dT}{dy} = -\frac{Q_1(y, T(y))}{\gamma_1 R}$, sous la contrainte $T(a) = T_{a}$.
+%			\item[$\bullet$] SP2 modélise l'évaporation de l'humidité $M_w(y)$ à $T = 373\,\mathrm{K}$ selon l'EDO :\\ $ \frac{dM_w}{dy} = \frac{Q_2(y)}{\gamma_2 R}$, sous la contrainte  $M_w(a) = M_{a}$.
+%		\end{itemize}
+%		Ce système est défini par morceaux, selon la valeur de $T(y)$. Et la transition entre les deux régimes est conditionnée par $T=373\,\mathrm{K}$.
+		%\begin{rem}\
+		%	
+		%	Notre objectif est de tracer les profils respectifs de la température $T(y) \text{ et de l\'humidité } M_w(y)$ tout en apprenant  $R$ à l'aide de l'architecture native des PINNs. 
+		%\end{rem}
+%		\subsection{Formulation mathématique au sens des PINNs }
+	\subsubsection*{Formulation au sens des PINNs}
+	Soient $ \hat{T}(y, \theta_T), \hat{M}_w(y, \theta_M), \hat{R}( \theta_R)$ les approximations par réseau de neurones des fonctions $T(y), M_w(y), \text{ et du paramètre }R$, et $\theta = (\theta_T, \theta_M, \theta_R) $ l'ensemble des poids et biais optimisé pendant l'entraînement de sorte à satisfaire à la fois, les équations différentielles et les conditions initiales. 
+	
+	\subsection{Gestion de la transition et du paramètre $R$}
+	\begin{itemize}
+		\item[$\bullet$] Les deux régimes SP1 et SP2 sont liés selon la condition $T=373\,\mathrm{K}$ qui introduit une surface de discontinuité pouvant créer un saut brutal dans la loss. Pour éviter cela, les PINNs proposent une fonction de transition lisse $\mathcal{X}(T)$ autour de la condition de sorte à avoir une transition douce sans saut tel que : $\mathcal{X}(T) = \sigma\left(\lambda\left(T-373\right)\right)$ avec $\lambda >> 1$ un paramètre de raideur et $\sigma(s) = \frac{1}{1+e^{-s}}$ la fonction sigmoïde classique. Cette transformation dénaturalise légèrement la transition, mais ne modifie pas le comportement général des profils. Cette traduit le fait que si $T>373$ alors $\mathcal{X}(T) \approx 1$.		
+		\item[$\bullet$] Pour garantir que $R$ reste dans l'intervalle $\left[R_{\text{min}}, R_{\text{max}}\right]$ on régularise $R$ en posant :\\ $\hat{R}(\theta_R) = R_{\text{min}} + (R_{\text{max}} - R_{\text{min}})\cdot\sigma\left(z(\theta_R)\right)$. \\ $ z(\theta_R)$ est un poids libre choisi au début de l'entraînement.
+		Cette régularisation contraint $R$ à rester dans l'intervalle $\left[R_{\text{min}},R_{\text{max}}\right]$. 
+		\end{itemize}
+		\subsection{Formulation des résidus}
+		
+		\textbf{Définition : }Résidu d'une EDO \
+			
+			\textbf{Chen \textit{et al}, (2002)} défini le résidu différentiel d'une d'EDO comme l'écart entre les dérivées du réseau et le second membre de l'EDO.\\ 
+			Soient $\mathcal{R}_T(y) \text{ et }\mathcal{R}_{M_w}(y) $ les résidus pondérés des EDO de SP1 et SP2 défini par : 
+			\begin{align}\label{f:residu}
+				\mathcal{R}_T(y) &= \left(1-\mathcal{X}(T)\right)\cdot\left(\frac{d\hat{T}}{dy} + \frac{Q_1(y, \hat{T})}{\gamma_1 \hat{R}}\right),  \\ 
+				\mathcal{R}_{M_w}(y) &= \mathcal{X}(T)\cdot\left(\frac{d\hat{M_w}}{dy} - \frac{Q_2(y)}{\gamma_2 \hat{R}}\right).
+			\end{align} 
+			Ces résidus pondérés permettent de contourner la discontinuité autour de la transition $T = 373\,\mathrm{K}$ en lissant la sortie de chaque réseau à cause de la fonction douce $\mathcal{X}(T)$. Ce qui entraîne que si $\mathcal{X}(T) \approx 0$ alors SP1 est plus actif que SP2, et si $\mathcal{X}(T) \approx 1$ alors SP2 est plus actif que SP1.
+			
+\textbf{Remarque : }Ces résidus sont imposés en tout point du domaine $Y$, grâce à un ensemble de points de collocation $y_i$.
+Les dérivées $ \frac{d\hat{T}}{dy} \text{ et }  \frac{d\hat{M}_w}{dy} $ sont obtenues par différentiation automatique, c'est-à-dire si $ \hat{T}(y) = \mathcal{N}_T(y, \theta_T) \text{ alors }\left[\frac{d\hat{T}}{dy}(y_i) = \frac{\partial\mathcal{N}_T}{\partial y}(y_i) \right]$ d'où la garantie et la précision du calcul des résidus.
+
+	
+		
+	\textbf{Définition : }Résidu des conditions 
+			
+			C'est l'écart entre la solution approchée et les conditions imposées.
+			Soient $\mathcal{C}_T \text{ et } \mathcal{C}_{M_w} $ les résidus des contraintes de SP1 et SP2 définies par :
+			\begin{equation}
+				\mathcal{C}_T(y_0) = \hat{T}(a) - T_{a}, \quad
+				\mathcal{C}_{M_w} (y_0) = \hat{M}_w(a) - M_{a}  
+			\end{equation} 
+		
+		\subsection{Fonction de perte globale}	
+		
+		\textbf{Définition : }
+			On appelle fonction de perte (loss) d'une EDO la fonction objective $\mathcal{L}( \theta )$  qui permet de calculer l'écart entre les EDO et les contraintes et définie par : 
+			\begin{align}\label{f:cout}
+				\mathcal{L}(\theta) = \mathcal{L}_{\text{EDO}} + \mathcal{L}_{\text{contraintes}}, 
+			\end{align}
+avec : $\mathcal{L}_{\text{EDO}} = \frac{1}{N}\sum_{i=1}^{N}\left[\mathcal{R}_T(y_i)^2 +  \mathcal{R}_{M_w}(y_i)^2\right]$ résidus de l'EDO, 
+$y_i \in Y$ les points de collocations, 
+et   $\mathcal{L}_{\text{contraintes}}$ : résidus des contraintes.
+	
+	
+		\textbf{Remarque : }l'expression de $\mathcal{L}_{\text{contraintes}}$ dépend la technique d'imposition des conditions.
+			
+		
+	\subsection{Méthodes d'imposition des conditions initiales}
+	Il existe deux approches principales pour satisfaire les conditions initiales d'une équation différentielle, qui sont la pénalisation et la transformation exacte.
+	\subsubsection{Imposition par pénalisation} 
+Il s’agit de l’approche la plus courante, car les conditions aux bords sont intégrées directement dans la fonction de perte, à l’aide de coefficients de pondération strictement positifs $\lambda_1$ et $\lambda_2$.  
+Cela permet d’imposer approximativement le respect de ces conditions. L’équation \ref{f:cout} devient alors :
+		
+	\begin{align}\label{f:penalisation}
+	\mathcal{L}( \theta ) &= \mathcal{L}_{\text{EDO}} + \lambda_1 \mathcal{C}_T(y_0) + \lambda_2 \mathcal{C}_{M_w} (y_0) \\ \notag&= \underbrace{  \frac{1}{N}\sum_{i=1}^{N}\left[\mathcal{R}_T(y_i)^2 +  \mathcal{R}_{M_w}(y_i)^2\right] }_{\mathcal{L}_{\text{EDO}}} + \lambda_1 {(\hat{T}(a)-T_a)^2 + \lambda_2 (\hat{M}_w(a)-M_a)^2}
+\end{align}
+			
+\textbf{Remarque : }si les coefficients $\lambda_1$ et $\lambda_2$ sont trop faibles, il peut avoir un sous-apprentissage du modèle, par contre s'il est trop grand le modèle risque un sur-apprentissage. Donc un choix judicieux de $\lambda$ est crucial pour cette approche. L'approche par la pénalisation est l'approche la plus simple à mettre en œuvre et souple, mais elle présente des limites, car elle ne garantit pas le respect exact des conditions.		
+	
+		
+		\subsubsection{Imposition exacte par transformation}
+		Cette approche consiste à construire les sorties du réseau à partir des conditions initiales de sortes a ce qu'elle soit exactement respectée dans ce cas \eqref{f:cout} se résume à :
+		\begin{align}
+			\mathcal{L}( \theta ) = \mathcal{L}_{\text{EDO}} = \underbrace{  \frac{1}{N}\sum_{i=1}^{N}\left[\mathcal{R}_T(y_i)^2 +  \mathcal{R}_{M_w}(y_i)^2\right] }_{\mathcal{L}_{\text{EDO}}}
+		\end{align}
+	où les $y_i$ sont les points de collocation uniformément repartie sur $Y$. Et les conditions sont construites en posant $\hat{T}(y) = T_{a} + (y-a) \cdot\mathcal{N}_T(y; \theta_T)$ et $	\hat{M_w}(y) = M_{a}+ (y-a)\cdot\mathcal{N}_M(y; \theta_M)$.
+	Où $\mathcal{N}_T \in [0, 1]$ et $\mathcal{N}_M \in [0, 1]$ sont des sorties du réseau entièrement connectés, mais nuls aux bornes. Ce qui permet d'imposer exactement que $T_{a} = T_{a}$ et  $M_w{(a)} = M_{a}$
+		
+		%\begin{rem}\
+		%	
+		%	Dans notre cas d'après la figure \ref{fig:im1-2}a de nous pouvont déduire que les conditions aux limites sont bien connues donc il sera plus intéressant d'utiliser la seconde approche imposition exacte par transformation, Cela permettra de réduire la dimension de la loss, tout en s'assurant que les solutions respectent parfaitement nos conditions imposées mais bien évidemment qu'elle devient plus complexe. 
+		%\end{rem}
+		
+		\subsection{ Optimisation du problème} 
+		Les paramètres du modèle  $\theta\left( \theta_T, \theta_M, \theta_R \right)$ sont optimisés en deux phases Adam et L-BFGS pour garantir la solution en minimisant la fonction de perte $\mathcal{L}(\theta)$.\
+		
+		Le minimum est atteint lorsque la solution approximée $(\hat{T}, \hat{M}_w, \hat{R})$ satisfait à la fois les équations différentielles, la continuité de la solution globale et le respect des conditions initiales. 
+		
+		
+	
+	\textbf{Remarque : }
+			\begin{itemize}
+			\item Adam est une méthode stochastique basée sur la descente de gradient, utilisée au début de l'entraînement son avantage est qu'elle facilite les calculs même avec des gradients bruités.
+			\item L-BFGS est une méthode quasi-Newtonienne souvent utilisée à la fin de l'entraînement pour permettre une convergence plus précise.
+			\end{itemize}
+			
+			\subsection{Cas d'étude}
+			Considérons un espace rectangulaire de longueur $12\, \mathrm{m}$ c'est-à-dire $Y = [0, 12]$. et les données du bouleau blanc (White birch) pour un feu de type heading (La flamme se propage dans le même sens que le vent.) avec une pente de $+17°$ et une vitesse de $+1.1\,\mathrm{m/s}$. 
+			
+			\subsection{Valeurs des paramètres physiques}
+			Les paramètres physiques dont nous disposons des valeurs exactes sont présentés dans le tableau \eqref{tab:donnée}. Les paramètres manquants ont été supposés et donnés dans le tableau \eqref{tab:donnée_manquante}.
+			
+			\subsection{Implémentation par PINNs}
+		Pour l’implémentation numérique, nous avons utilisé le langage \texttt{Python} via l’environnement \texttt{Spyder 5.5.1}, intégré au progiciel \texttt{Anaconda Navigator}.  
+		La bibliothèque de calcul utilisée est \texttt{PyTorch}, qui offre une grande souplesse pour la définition et l’entraînement de réseaux de neurones.
+		
+		Le réseau de neurones employé est composé de trois couches linéaires, avec deux fonctions d’activation spécifiques : \texttt{Tanh} et \texttt{Sigmoid}. Il est structuré comme suit :
+		
+		\begin{itemize}
+			\item[$\ast$] \textbf{Couche d’entrée} : 1 neurone en entrée, 64 neurones en sortie.
+			
+			\item[$\ast$] \textbf{Deux couches cachées} : chacune avec 64 neurones en entrée et 64 neurones en sortie, activées par la fonction \texttt{Tanh}.  
+			Cette activation permet de stabiliser les variations non linéaires tout en produisant des sorties dans l’intervalle $[-1, 1]$.
+			
+			\item[$\ast$] \textbf{Couche de sortie} : 64 neurones en entrée, 1 neurone en sortie.
+		\end{itemize}
+		
+		La fonction d’activation \texttt{Sigmoid} est utilisée pour garantir que certaines contraintes physiques restent bornées, tout en assurant la différentiabilité requise pour le calcul des dérivées.  
+		Cette activation produit des sorties comprises dans l’intervalle $[0, 1]$.
+		
+		\subsubsection*{Imposition des contraintes}
+		Pour l'imposition des conditions initiales, nous avons adopté l'approche par pénalisation. Car la transformation rendait les sorties des réseaux trop linéaires. Ce qui aboutissait a une mauvaise convergence (linéaire) des différents profils. 
+		
+		\clearpage
+		\begin{table}[H]
+			\centering
+			\caption{Variables d'entrée et leurs plages pour le cas du bouleau blanc.}%\textbf{(Koo \textit{et al}, 2005)}}
+		\label{tab:donnée}
+		\begin{tabular}{@{}llr@{}}
+			\toprule
+			Paramètre  & Valeur & unité \\
+			\midrule
+			Longueur de la flamme ($L_{fl}$)& 0.08 – 1.69 & $\mathrm{m}$ \\
+			Vitesse du vent ambiant ($U_w$) & -1.15 – +1.15 & $\mathrm{m/s}$ \\
+			Pente du lit de combustible ($\Omega_s$) & -17 – +17 & ° \\ 
+			Surface/volume des particules de combustible (s)& 17.5 & $\mathrm{M^{-1}}$ \\
+			Masse volumique du combustible ($\rho_f$) & 609 & $\mathrm{Kg/m^3}$ \\ 
+			Fraction massique initiale de l'eau ($\mathrm{M_w}(0)$) & 0.11 & - \\ 
+			Rapport d'emballage ($\phi$) & 0.008 & - \\ 
+			Diamètre de la branche (D) & 0.00252 & $\mathrm{m}$ \\
+			Largeur du lit de combustible ($w$) & 0.686 & $\mathrm{m}$ \\
+			Épaisseur du lit de combustible ($l_f$)& 0.114 & $\mathrm{m}$ \\
+			Absorptivité du lit de combustible ($a_{fb}$) & 0.6 & - \\
+			Émissivité de la flamme ($\epsilon_{fb}$) & 0.9 & - \\
+			Température d'inflammation ($T_{ig}$) & 561 & $\mathrm{K}$ \\
+			Température ambiante ($T_{\infty}$)& 303 & $\mathrm{K}$\\ 
+			Température de la flamme ($T_{fl}$) & 1083 & $\mathrm{K}$ \\
+			Chaleur spécifique du combustible ($C_{pf}$) &  2500 & $\mathrm{KJ/Kg.K}$ \\
+			\bottomrule
+		\end{tabular}
+		\end{table}
+		\begin{table}[H]
+		\centering
+		\caption{Variable supposé dans le cas du bouleau blanc.}
+		\label{tab:donnée_manquante}
+		\begin{tabular}{@{}llr@{}}
+			\toprule
+			Paramètre  & Valeur & unité \\
+			\midrule
+			Viscosité dynamique de l'air $\mu$ à 400° & 6.2$\times10^5$ & $\mathrm{(Pa·s) }$ \\
+			Nombre de Prandlt ($P_r$) & 0.7 &  $\mathrm{-}$ \\
+			Enthalpie de vaporisation de l'eau $h_{\text{vap}}$ & $2.26 \times10^{6}$ &  $\mathrm{J/kg}$\\ 
+			Conductivité thermique de la flamme & 1 & $\mathrm{W/m.K}$ \\
+			Conductivité thermique de la braise & 1 & $\mathrm{W/m.K}$ \\
+			\bottomrule
+		\end{tabular}
+		\end{table}
+		\clearpage
+		
+		\part*{RÉSULTATS ET DISCUSSION}
+		\chapter{RÉSULTATS ET DISCUSSION} 
+		
+%		\chapter{Étude et nature du modèle de référence}
+%\section{Formulation mathématique du modèle}
+
+Dans les sections suivantes, nous présentons d’abord les résultats issus de l’analyse mathématique du modèle, accompagnés de leur discussion.  
+Ensuite, nous exposons les résultats obtenus par l’implémentation des PINNs appliqués au modèle de référence.\\
+Ce dernier a été reformulé sous la forme d’un système $S(y, T(y))$, décomposé en deux sous-problèmes : SP1 \eqref{SP1} et SP2 \eqref{SP2}, définis comme précédemment.
+
+
+\section{Résultats des analyses du système}
+\subsection{Nature hybride du système}
+Le système $S$ présente à la fois deux états continus $ T \text{ et } M_w $ modélisé par des EDO, et un événement discret $T = 373\, \mathrm{K}$. De plus SP1 et SP2 sont activés ou désactivés selon une condition sur l'état continu $T(y)$ qui déclenche le changement de régime. 
+Donc d'après la classification \eqref{sub:driven} le système $S(y, T(y))$ est un système hybride d'équation différentielle ordinaire caractérisé par une transition conditionnelle.
+
+\subsection{Étude de l'existence de solution}
+
+Le système $S$ présente une discontinuité en $T = 373\,\mathrm{K}$, où la dérivée de $T$ change brutalement, passant de $\frac{dT}{dy} < 0$ à $\frac{dT}{dy} = 0$. Cette rupture entraîne une discontinuité dans le champ vectoriel, ce qui empêche l’application directe des théorèmes classiques tels que Cauchy-Lipschitz ou Carathéodory \eqref{th:classique}, qui exigent des conditions de régularité (continuité, Lipschitzianité) non satisfaites ici.
+Pour traiter ce type de discontinuité, on se place dans le cadre des inclusions différentielles de Filippov  \eqref{f:filippov}. Le champ vectoriel est alors défini par morceaux selon deux régimes :
+
+\begin{equation}
+	f(y, T, M_w) = 
+	\begin{cases}
+		\left( -\frac{Q_1(y, T)}{\gamma_1 R}, 0 \right), & \text{ si } T \neq 373\,\mathrm{K}, \\
+		\left( 0, \frac{Q_2(y)}{\gamma_2 R} \right), & \text{ si } T = 373\,\mathrm{K}.
+	\end{cases}
+\end{equation}
+
+Soit $V = \left\{(T, M_w) \in \R^2 \mid T = 373 \right\}$ l’hyperplan de discontinuité. Le champ généralisé de Filippov associé à $f$ est défini comme l’enveloppe convexe des valeurs limites du champ de part et d’autre de $V$ :
+\begin{equation}
+	F(y, T, M_w) = \overline{co}\left\{ \lim_{T \to 373^-} f(y, T, M_w), \lim_{T \to 373^+} f(y, T, M_w) \right\}.
+\end{equation}
+
+Sous l’hypothèse que les fonctions $Q_1(y, T)$ et $Q_2(y)$ sont continues en $y$ et que $R > 0$, le champ généralisé $F$ est mesurable, localement borné et à valeurs convexes fermées. D’après le théorème d’existence de Filippov, il existe donc une solution au système sous forme d’inclusion différentielle :
+\[
+\frac{d}{dy} \begin{pmatrix} T \\ M_w \end{pmatrix} \in F(y, T, M_w).
+\]
+
+Ainsi, le système admet une solution globale au sens de Filippov.
+
+%\subsubsection{Étude de la stabilité}
+%
+%	Considérons le régime SP1 défini par : $\frac{dT}{dy} = - \frac{Q_1(y, T)}{\gamma_1 R}$ \\
+%	Sous l'hypothèse que $Q_1$ est la chaleur transmise au combustible, et représente la somme de plusieurs les flux positifs à l'exception de la perte radiative qui n'est pas dominante alors \\$Q_1(y, T(y))>0 \Longrightarrow \frac{dT}{dy} <0$, d'où $T$ est monotone donc SP1 est stable. \\ De même si on considère le régime SP2 défini par : $\frac{M_w}{dy} = \frac{Q_2(y)}{\gamma_2 R}$.\\
+%	 avec $ Q_2(y) = Q_1(y, 373) > 0 \Longrightarrow \frac{dM_w}{dy} > 0 $ d'où $M_w$ est monotone donc SP2 est stable.
+%	Le système dépend de deux variables d'état $T \text{ et } M_w$ commutant à la condition $T = 373\,\mathrm{K}$, et la transition SP1\textrightarrow SP2 \textrightarrow SP1 ne s'effectue qu'une seule fois dans l'espace sans oscillation possible.\\ Donc on peut conclure que le système est stable par morceaux.
+
+\subsection{Tentative d'une résolution analytique}
+$S$ est un système hybride d'EDO à transition de régime conditionnelle, donc l'idéal serait de déterminer une solution par morceau et de discuter sur l'existence d'une solution globale admissible.  
+
+Soient $y_1$ et $y_2$ deux éléments de $Y = \left[0, a\right]$ tels que $0 < y_2 < y_1 < a$,  
+où $y_1$ représente l’instant auquel le sous-problème SP1 se désactive et SP2 s’active,  
+et $y_2$ l’instant auquel SP2 se désactive et SP1 reprend.
+
+
+\begin{enumerate}
+	\item Phase 1 (SP1) sur $\left[y_1, a \right]$.\\
+	On a : $  \frac{dT}{dy} = -\frac{Q_1(y, T(y))}{\gamma_1 R}$ \quad avec, 
+	\begin{align*}
+		 Q_1(y, T(y)) &= \alpha_1 \left(1-\frac{ya-b}{\sqrt{1+(ya-b)^2}}\right) + \alpha_2e^{-ry}+ \alpha_3\left(T^4(y) - T_\infty^4\right)\\
+		& + \frac{\alpha_4}{y^{1/2}}(T_{fl} - T(y))e^{-cy} + \alpha_6(T_b-T(y))e^{-ry}
+	\end{align*}
+	Linéarisation de $Q_1(y, T(y))$ on a : $T^4(y) - T_\infty^4 \approx 4T_{\text{ig}}^3 T(y) - 3T_{\text{ig}}^4 - T_\infty^4$
+
+	En remplaçant dans $Q_1(y, T(y))$ on obtient : 
+	\begin{align*}
+		Q_1(y, T(y)) &\approx \left[\alpha_1\left(1-\frac{ya-b}{\sqrt{1+(ya-b)^2}}\right) + \alpha_2 e^{-ry} - A + \frac{\alpha_4T_{\text{fl}}}{y^{1/2}}e^{-cy} + \alpha_6T_be^{-ry}\right] \\
+		&\quad - \left[ \frac{\alpha_4}{y^{1/2}} e^{-cy} + \alpha_6e^{-ry} - B \right] T(y)\\
+		& \text{ avec } A=  3\alpha_3 T_{\text{ig}}^4 + \alpha_3 T_\infty^4, \quad B= 4\alpha_3 T_{\text{ig}}^3
+	\end{align*}
+	Donc en posant : 
+	\begin{equation*}
+		P(y) = \frac{1}{\gamma_1 R}\left[\alpha_1\left(1-\frac{ya-b}{\sqrt{1+(ya-b)^2}}\right) + \alpha_2 e^{-ry} - A + \frac{\alpha_4T_{\text{fl}}}{y^{1/2}}e^{-cy} + \alpha_6T_be^{-ry}\right]
+	\end{equation*}
+	et 
+	\begin{equation*}
+		Q(y) = \frac{1}{\gamma_1} \left[ \frac{\alpha_4}{y^{1/2}} e^{-cy} + \alpha_6e^{-ry} - B\right]
+	\end{equation*}
+	SP1 devient : 
+	\begin{equation}\label{fac:resolution}
+		\frac{dT}{dy} - Q(y)T(y)= -P(y) 
+	\end{equation}
+	Cette forme est la forme générale qu'on retrouve dans la méthode des facteurs intégrants. Résolution par la méthode des facteurs intégrant \eqref{fac}. 
+	\begin{itemize}
+		\item Déterminations de $\mu(y)$.\
+		On a : \begin{align*}
+			\mu(y)& = \exp\left(-\int Q(y)dy \right)\\
+			&= \exp\left[-\frac{1}{\gamma_1 R} \int \left( \frac{\alpha_4}{y^{1/2}} e^{-cy} + \alpha_6e^{-ry} - B\right)dy \right] \\
+			\text{Donc : } \mu(y)&= \exp\left(-\frac{1}{\gamma_1 R} \left[2\alpha_4\sqrt{\frac{5\pi L_{fl}}{6}}\mathrm{erf}(\sqrt{cy})- \frac{\alpha_6}{r}e^{ry} - By \right] + C \right) 
+		\end{align*}
+		\item  Déterminations de : $\int \mu(y)P(y)dy$\\ 
+		On a : \begin{align*}
+			\mu(y)P(y) &= \exp\left(-\frac{1}{\gamma_1 R} \left[2\alpha_4\sqrt{\frac{5\pi L_{fl}}{6}}\mathrm{erf}(\sqrt{cy})- \frac{\alpha_6}{c}e^{_cy} - By \right] + C \right)\times\frac{1}{\gamma_1 R}\\ 
+			&\left[\alpha_1\left(1-\frac{ya-b}{\sqrt{1+(ya-b)^2}}\right) + \alpha_2 e^{-ry} - A + \frac{\alpha_4T_{\text{fl}}}{y^{1/2}}e^{-cy} + \alpha_6T_be^{-ry}\right]
+		\end{align*}
+	\end{itemize}
+
+\textbf{Discussion : } Dans un premier instant $T(y)$ est définie sur $\left[y_1, a\right] \subset Y$.\ 
+
+On peut avoir une solution explicite $T(y)$ que si $y_1$ est connue, avec $y_1$ la solution de $T(y_1) = 373 $, or analytiquement $y_1$ ne peut être obtenu qu'à partir de la forme explicite de $T(y)$ qu'on cherche à déterminer. 
+
+Donc une solution analytique proprement dite de SP1 n'existe pas sur $\left[y_1, a\right]$. Néanmoins, plusieurs approximations comme les méthodes d'intégration numérique peuvent être utilisées pour approximer la valeur de quelques intégrales.
+
+\item Phase 2 (SP2) : sur $\left[y_2, y_1\right]$.\\
+Sur $ \left[y_2, y_1 \right]$ une solution générale de $\frac{dM_w}{dy} = \frac{Q_2(y)}{\gamma_2 R}$ peut être obtenu, car le second membre de l'EDO ne dépend que de y, par application de la méthode de changements de variable.	La solution générale est de la forme : 
+	\begin{align*}
+		M_w(y) &= \frac{1}{\gamma_2 R} \Bigg[
+		\alpha_1 y - \frac{\alpha_1}{a} \sqrt{1+(ya-b)^2} - \frac{\alpha_2}{c} e^{-ry}+ \alpha_3 (373^4 - T_\infty^4) y  \\
+		&\quad + 2\alpha_4 (T_{fl}-373) \sqrt{\frac{5\pi }{c}} \text{erf}\left(\sqrt{cy}\right)  - \frac{4\alpha_6}{s} (T_b-373) e^{-ry}\Bigg] + C 				
+	\end{align*}
+
+		\textbf{Discussion : }
+		La constante C ne peut être déterminée que si l'une des bornes $y_1$ ou $y_2$ est connue. Ce qui est impossible à déterminer analytiquement.
+
+	\item Retour à la phase SP1 sur ($[0, y_2]$). 
+	Les bornes $y_1\text{ et } y_2$ étant inconnues et indéterminable analytiquement. Il est donc impossible d'obtenir une solution analytique de $T(y)$ sur $[0, y_2]$ 
+\end{enumerate}
+
+D'après les points 1, 2 et 3, il n'existe pas de solution analytique du système $S$ à cause de la complexité du second membre $Q_1(y, T(y))$, et des distances $y_1$ et  $y_2$ inconnues.
+%			Ainsi, bien que les deux sous problèmes SP1 et SP2 admettent chacun une résolution analytique local. La détermination d'une solution globale nécessite de connaitre exactement  l'intervalle où le système reste bloqué sur $T=373$.
+%			Donc une solution analytique globale est impossible pour notre système $S$. Ce qui motive d'essayer de tenter une résolution numérique et de voir les limites. 
+
+\subsection{Tentative d'une résolution numérique}
+\subsubsection*{Résolution par les méthodes numériques classiques des systèmes hybrides}
+
+\begin{enumerate}
+	\item La méthode d'Euler explicite est instable et la forte non-linéarité de $Q_1(y, T(y))$ limite largement l'utilisation de cette méthode. 
+	\item Les méthodes telles qu'Euler implicite, RK2 et RK3 bien que peu moins stable, ces méthodes sont adaptées à un champ vectoriel lisse (dérivée monotone) alors que le champ de notre modèle change brutalement à $T= 373\,\mathrm{K}$, passant de $-\frac{Q_1(y, T(y))}{dy}$ à $0$. Ce qui n'est pas directement détectable dans la construction de ces méthodes numériques.
+	\end{enumerate} 
+	Donc ces méthodes sont limitées, car elles sont incapables de déterminer l'emplacement exact de la transition et le paramètre $R$ tout en traçants les profils de $T \text{ et }M_w$.
+%	\subsubsection{La méthode de Runge-Kutta d'ordre 4 (RK4)}
+%	
+%	Bien connue pour sa stabilité et sa précision dans le cadre des EDO régulières. C'est la méthode utilisée par \textbf{Koo \textit{et al}, (2005)}, associées à une méthode d'optimisation. Les resultats obtenus ont été prépour tracer les profils et déterminer la vitesse de propagation $R$. Les résultats obtenus sont présentés par la figure \eqref{fig:im1-2} donnée dans la première partie avec $R = 0.062$. 
+%	La méthode de RK4 associé à une méthode d'optimisation implicitement on aboutir à des résultats numériques en adéquation avec la dynamique du système. Par contre les autres méthodes de par leurs structures natives, il serait très laborieux et voir impossible de gérer un tel modèle. 		
+
+		\section{Résolution du modèle à l'aide des PINNs}
+		\label{chp:RN}
+			
+	\subsection{Résultats}
+À partir des données expérimentales du bouleau blanc (présentées dans le tableau~\ref{tab:donnée}) et des valeurs numériques supposées (tableau~\ref{tab:donnée_manquante}),  
+la méthode des réseaux de neurones physiquement informés (PINNs) nous a permis de déterminer le profil de la température $T$ et celui de l’humidité $M_w$ en fonction de la distance $y$ séparant le combustible de la flamme.
+
+Par minimisation de la fonction de perte, le paramètre $R$, représentant la vitesse de propagation du feu, a également été appris automatiquement, sans recourir à une méthode secondaire.  
+En outre, le profil de température obtenu a permis d’estimer la contribution de chaque flux thermique intervenant dans le mécanisme de transfert de chaleur.
+
+Les résultats sont présentés sous forme de trois figures :
+\begin{itemize}
+	\item la figure~\ref{fig:py3}, montrant séparément les profils de $T$ et $M_w$ en fonction de $y$ ;
+	\item la figure~\ref{fig:im6}, présentant ces deux profils de manière combinée ;
+	\item la figure~\ref{fig:py5}, illustrant la contribution de chaque flux $q_{\text{cs}}, q_{\text{ci}}, q_{\text{rs}}, q_{\text{ri}}$ et $q_{\text{pr}}$ en fonction de $y$.
+\end{itemize}
+
+Enfin, le tableau~\ref{tab:final} fournit les valeurs numériques correspondantes, permettant de suivre l’évolution des profils et des flux normalisés en fonction de $y$.
+
+
+\subsection{Analyse des résultats}
+
+La flamme est fixée en $y = 0$ et les conditions initiales sont données en $y = 12$.  
+On observe que la température augmente progressivement de $303\,\mathrm{K}$ à $373\,\mathrm{K}$.  
+Dans cette première phase, la hausse de température reste modérée, car le combustible contient encore de l’humidité.  
+De plus, la flamme étant considérée comme l’unique source de chaleur, l’énergie transmise au combustible est d’autant plus faible que celui-ci est éloigné de la source.
+Au-delà de $373\,\mathrm{K}$, la température croît plus rapidement et tend vers la température d’inflammation, fixée à $561\,\mathrm{K}$.  
+Cette accélération s’explique par le fait que le combustible est désormais totalement sec, ce qui rend la pyrolyse plus rapide.  
+La température se stabilise alors progressivement autour de $561\,\mathrm{K}$.
+
+Concernant l’humidité, elle reste presque constante au début, car la température du combustible est largement inférieure à la température d’ébullition de l’eau, ce qui empêche toute évaporation significative.  
+Lorsque la température du combustible atteint $373\,\mathrm{K}$, correspondant à la température d’ébullition de l’eau, l’humidité décroît alors fortement, à une vitesse $R = 0{,}068$.  
+Cette chute rapide s’explique par la rupture des liaisons des molécules d’eau ($\mathrm{H_2O}$) rendue possible par la température atteinte. Le combustible s’assèche ainsi rapidement.  
+Une fois que toute l’humidité a été évacuée ($M_w(0) = 0$), son taux reste constant jusqu’à la fin du processus de pyrolyse.
+
+La figure~\ref{fig:py5} montre que la radiation surfacique, représentant le transfert de chaleur par rayonnement de la flamme vers la surface du combustible, est le flux le plus dominant.  
+Elle est suivie par la convection surfacique et les pertes radiatives, qui restent significatives comparées aux flux internes.  
+	
+		\clearpage
+	\begin{figure}[]
+		\centering
+		\includegraphics[width=0.7\linewidth]{py3}
+		\caption{Graphe des profils $T$ et $M_w$ en fonction de $y$ avec PINNs}
+		\label{fig:py3}
+	\end{figure}
+	\begin{figure}[]
+		\centering
+		\includegraphics[width=0.7\linewidth]{py6}
+		\caption{Graphe combiné de $T(y)$ et de $M_w(y)$ en fonction de $y$ à l'aide des PINNs}.
+		\label{fig:py6}
+	\end{figure}
+	\begin{figure}[]
+		\centering
+		\includegraphics[width=0.7\linewidth]{py5}
+		\caption{Contribution de chaque flux en fonction de $y$ à l'aide des PINNs}
+		\label{fig:py5}
+	\end{figure}
+	\clearpage	
+	
+\begin{landscape}
+		\begin{table}[]
+		\Huge
+		\centering
+		\caption{Valeurs numériques des différents profils et flux en fonctions de $y$}
+		\label{tab:final}
+		\begin{tabular}{@{}lrrrrrrrr@{}}
+			\toprule
+			$y$ (m) & $T$ (K) & $M_w$ & $q_{\text{rs}}$ & $q_{\text{cs}}$ & $q_{\text{ri}}$ & $q_{\text{ci}}$ & $q_{\text{pr}}$ & $Q_1$ ($\mathrm{kW/m^3}$)\\
+			\midrule
+			0.0  & 556.6 & 0.039& 135.2  & 92.8 & 32.3 & 0.7   & -33.7 & 227.4 \\
+			1.0  & 535.8 & 0.106 & 86.0  & 25.2 & 0.4   & 0.1 & -24.0 & 87.7  \\
+			2.0  & 456.7 & 0.109 & 34.8  & 16.8  & 0.0   & 0.0   & -13.6 & 38.0  \\
+			4.0  & 353.1 & 0.1100 & 7.4   & 9.9  & 0.0   & 0.0   & -2.8 & 14.5  \\
+			6.0  & 315.5 & 0.1100 & 2.9   & 6.0  & 0.0   & 0.0   & -0.6 & 8.3 \\
+			8.0  & 306.4 & 0.1100 &1.5   & 3.7  & 0.0   & 0.0   & -0.2  & 5.0  \\
+			12.0 & 303.0 & 0.1100 & 0.6   &1.5   & 0.0   & 0.0   & -0.0   & 2.1   \\
+			\bottomrule
+		\end{tabular}
+	\end{table}
+\end{landscape}
+	\clearpage
+	
+		Cette prédominance des flux surfaciques par rapport aux flux internes indique que les échanges thermiques à la surface du lit de combustible sont plus importants que ceux à l’intérieur du lit.
+	\subsection{Discussion}
+\subsection{Discussion des résultats}
+
+Les profils de température et d’humidité obtenus sont en accord avec les lois physiques du phénomène.  
+En effet, plus le combustible se rapproche de la flamme, plus sa température augmente, tendant progressivement vers la température d’inflammation, fixée à $561\,\mathrm{K}$.  
+Parallèlement, l’humidité contenue dans le combustible décroît jusqu’à s’annuler autour de $373\,\mathrm{K}$, température correspondant à l’ébullition de l’eau, avec une vitesse de propagation constante estimée à $R = 0{,}068$.
+
+Par ailleurs, l’importance de la chaleur à la surface du combustible confirme l’hypothèse selon laquelle la flamme est considérée comme l’unique source de chaleur.  
+De plus, à quelques écarts près, les flux obtenus sont en excellent accord avec ceux rapportés par \textbf{Koo \textit{et al.} (2005)}.
+
+Le décalage observé dans le profil de l’humidité $M_w$ s’explique par le fait que le sous-problème SP2 ne détecte pas précisément l’instant de transition.  
+Cela peut être dû aux paramètres supposés, à la gestion imparfaite de la discontinuité par la fonction douce $\mathcal{X}(y)$, ou encore au déséquilibre des coefficients de pénalisation dans la fonction de perte, ce qui constitue l’une des limites des PINNs classiques.
+
+Malgré cela, l’approche proposée a permis de valider plusieurs aspects du modèle :  
+l’imposition exacte des conditions initiales, la détermination automatique de la vitesse $R = 0{,}068$, l’identification du moment de transition, ainsi que la restitution des profils de $T$, $M_w$, et des différents flux.  
+Les solutions obtenues, par construction, sont globales, continues et différentiables, conformément aux propriétés des réseaux de neurones utilisés.
+
+
+	
+	\chapter*{Conclusion et Perspective}  
+	\addcontentsline{toc}{chapter}{Conclusion et Perspective}
+	\vspace{-0.4cm}
+	
+Dans ce document, nous avons étudié un modèle physique simplifié de propagation du feu dans un lit de combustible poreux, inspiré des travaux de \textbf{Koo \textit{et al.} (2005)}.  
+Ce modèle a été formulé sous la forme d’un système hybride, composé de deux régimes d’équations différentielles ordinaires (SP1 et SP2), qui s’activent en fonction d’une condition imposée sur la température locale : $T(y) = 373\,\mathrm{K}$.
+L’analyse mathématique a montré que le modèle constitue un système hybride stable par morceaux, admettant des solutions globales.  
+Cependant, en raison de sa nature (transitions brutales, discontinuités, non-linéarités, etc.), l’obtention de solutions analytiques ou numériques classiques s’avère difficile.  
+Seule la méthode de Runge-Kutta d’ordre 4 (RK4) a permis d’obtenir des résultats relativement satisfaisants.
+Par ailleurs, l’implémentation de la méthode des réseaux de neurones physiquement informés (PINNs), dans sa version classique, a permis de transformer le système initialement discontinu en un système continu à l’aide d’une fonction d’activation douce centrée autour de $T = 373\,\mathrm{K}$.  
+Cette méthode a conduit à des solutions globales, continues et différentiables, qui valident plusieurs aspects dynamiques du modèle, tout en étant cohérentes avec la réalité physique du phénomène.  
+Elle nous a permis, comme fixé dans nos objectifs, d’apprendre simultanément les trois variables clés du système : la température $T(y)$, l’humidité $M_w(y)$, et la vitesse de propagation $R$.
+
+Toutefois, il convient de noter que les profils obtenus avec la méthode RK4, en considérant explicitement les états comme discontinus, sont globalement meilleurs et requièrent moins de ressources en termes de temps de calcul que ceux obtenus par l’apprentissage conjoint avec les PINNs.  
+En effet, bien que l’apprentissage profond offre une inférence rapide une fois le modèle entraîné, la phase d’entraînement initiale est particulièrement longue comparée aux approches classiques.
+Comme le souligne \textbf{Raissi \textit{et al} (2019)}, les PINNs ne sont pas destinés à résoudre des problèmes directs, car ils ne pourront jamais rivaliser avec les méthodes numériques traditionnelles en termes d’efficacité et de précision.  
+Leur véritable force réside dans des contextes où des données réelles peuvent être intégrées pour ajuster le modèle et en améliorer les performances.
+
+En résumé, sous condition d’une bonne gestion des discontinuités dans les systèmes hybrides, cette étude confirme la faisabilité de l’application des PINNs à des problèmes physiques pouvant être reformulés comme des systèmes hybrides d’équations différentielles ordinaires à transitions de régime.
+
+Au regard des difficultés rencontrées pour atteindre la précision des méthodes numériques classiques et reproduire fidèlement les résultats obtenus par \textbf{Koo \textit{et al.} (2005)}, il apparaît essentiel d’envisager les pistes suivantes pour améliorer les performances des PINNs dans ce type de problèmes :
+
+\begin{itemize}
+	\item[$\maltese$] \textbf{Combiner les PINNs à la méthode de tir} afin d’imposer avec précision les conditions de référence, notamment aux frontières du domaine.
+	
+	\item[$\maltese$] \textbf{Utiliser une méthode numérique classique} pour détecter précisément les instants de transition entre les régimes, puis appliquer les PINNs séparément sur chaque sous-système identifié.
+	
+	\item[$\maltese$] \textbf{Utiliser des variantes améliorées des PINNs}, telles que les {Extended PINNs} (XPINNs), qui consistent à découper le domaine en plusieurs sous-domaines, chacun étant traité par un réseau distinct.  
+	Cette approche permet une meilleure gestion des discontinuités et des transitions brutales entre régimes.
+\end{itemize}
+
+
+	
+	\clearpage
+	\chapter*{Références Bibliographiques}
+	\addcontentsline{toc}{chapter}{Références Bibliographiques}
+	\begin{enumerate}[label={[\arabic*]}, leftmargin=*, align=left, nosep]
+		
+		\item Alur, R., Courcoubetis, C., Henzinger, T.A. et Ho, P.H., 1993. Hybrid Automata: An Algorithmic Approach to the Specification and Verification of Hybrid Systems. Computers science, 170, 209-229.
+		\item Ascher, U.M. et Petzold, L.R., 1998., Computer Methods for Ordinary Differential Equations and Differential-Algebraic Equations. 314p. Philadelphia, PA.
+		\item Branicky, M. S., 1995. Studies in Hybrid Systems : Modeling, Analysis, and Control, 199p. Massachusetts Institute of Technology.
+		\item Branicky, M. S. 1998. Multiple Lyapunov functions and other analysis tools for swit-ched and hybrid systems. IEEE Transactions on Automatic Control, 43, 475-482.
+		\item Branicky , M. 2005. Introduction to Hybrid Systems. Department of Electrical Engineering and Computer Science. 114, 91-116.
+		\item Buckmaster, J.D., Ludford, G.S.S., 1982. Theory of Laminar Flames. , 266p. Cambridge University Press
+		\item Chen, F., Sondak, D., Protopapas, P., Mattheakis, M., Liu, S., Agarwal, D et  Di Giovanni, M.. 2020. NeuroDiffEq : A Python package for solving differential equations with neural networks. Journal of Open Source Software, 5(52), 1931.
+		\item De Curtò, J. et De Zarzà, I., 2024. Hybrid State Estimation : Integrating Physics-Informed Neural Networks with Adaptive UKF for Dynamic Systems. Electronics, 13(11), 2208.
+		\item Dizet, N., Porterie, B., Pizzo, Y., Mense, M., Sardoy, N., Alibert, D., Louiche, J., Porterie, T. et Pouschat, P., 2022. Analyse des risques d’incendie dans les grandes structures à compartiments multiples à l’aide d’une approche hybride multi-échelle. Sciences appliquées, 12(9), 4123.
+		\item Dupuy, J.L. et Pimont, F., 2009. Modélisation du feu : une technologie puissante pour la simulation et la prédiction de la propagation. Revue Scientifique et Technique Forêt et Environnement du Bassin du Congo, 185, 18-19.
+		\item Filippov, A.F., 1988. Differential Equations with Discontinuous Righthand Sides. Kluwer Academic Publishers, 18, 1988.
+		\item Gallouët, T., Treust, L., Vladuts, S., 2022. Équations différentielles ordinaires. 108p. Université d’Aix-Marseille, France.
+		\item Goebel, R., Sanfelice, R.G. et Teel, A.R. 2012. Hybrid Dynamical Systems : Modeling, Stability, and Robustness. 232p. Princeton University Press.
+		\item Hairer, E., Norsett, S.P. et Wanner, G.. 1987. Solving Ordinary Differential Equations I. 523p, Springer-Verlag.
+		\item Hedfi, A.T., 2013. Surveillance par observateurs des systèmes dynamiques hybrides, 133p. Université de Lille 1.
+		\item Irsalinda, N., Bakar, M.A., Harun, F., Surono, S. et Pratama, D.A., 2025. A New Hybrid Approach for Solving Partial Differential Equations : Combining Physics-Informed Neural Networks with Cat-and-Mouse Based Optimization. Results in Applied Mathematics, 	25, 100-539.
+		\item Kazuyuki, A et Suzuki, H., 2010. Theory of hybrid dynamical systems and its applications to biological and mediacal systems, 365, 4893-4914 
+		\item Khalil, H.K., 2002. Nonlinear Systems. 3rd, Prentice Hall. 
+		\item Koo, E., Pagni, P., Woycheese, J., Stephens, S., Weise, D. et Huff, J., 2005. A Simple Physical Model for Forest Fire Spread Rate. Fire Safety Science, 8, 851-862.
+		\item Lei, C., Matsuzawa, H., Peng, R. et Zhou, M., 2021. Refined estimates for the propagation speed of the transition solution to a free boundary problem with a nonlinearity of combustion type. Journal of Differential Equations, 301, 1-32.
+		\item Liberzon, D., 2003. Switching in Systems and Control. 190p, Springer-verlag.
+		\item Lygeros, J., Johansson, K.H., Simic, S.N., Zhang, J. et Sastry, S.S.. 2003. Dynamical properties of hybrid automata. IEEE Transactions on Automatic Control, 48, 2-17.
+		\item Mecence, R., 2018. Equations différentielles à retard dépendant de l'état. 43p. Centre universitaire Belhadj Bouchaib d'Ain-Témouchent. 
+		\item Mele, A. and Pironti, A., 2024. Stabilization of Nonlinear Systems by Neural Lyapunov Approximators and Sontag’s Formula. 2024. IEEE.
+		\item Mullins, M., 2025. Réseaux de neurones informés par la physique pour la
+		résolution d’équations de mécanique des fluides. 144p. Université du Quebec, Montréal.
+		\item Pimont, F., 2008. Modélisation physique de la propagation des feux de forêts : Effets des caractéristiques physiques du combustible et de son hétérogénéité. 326p. Université d’Aix-Marseille.  
+		\item Pujo, M.L., 1918. Équations différentielles ordinaires et partielles. 47p. Université Claude Bernard - Lyon I.
+		\item Raissi, M., Perdikaris, P., Ahmadi, N. et Karniadakis, G.. 2024. Physics-Informed Neural Networks and Extensions. International Press, 1-8. 
+		\item Raissi, M. and Perdikaris, P. and Karniadakis, G. E., 2019. Physics-informed neural networks : A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations. Journal of Computational Physics, 378, 686-707.
+		\item Schiulaz, M., Laumann, C.R., Balatsky, A.V. et Spivak, B.Z.. 2018. Theory of combustion in disordered media. Physical Review E, 97(6), 062-133.
+		\item Zhang, Z. and Wang, Q. and Zhang, Y. and Shen, T. and Zhang, W., 2025. Physics-informed neural networks with hybrid Kolmogorov-Arnold network and augmented Lagrangian function for solving partial differential equations. Scientific Reports, 15(1), 10523. 
+	\end{enumerate}
+	
+	
+	
+	%%% Références (style Vancouver)
+	%	\printbibliography[title=Références Bibliographiques]
+	%	\addcontentsline{toc}{chapter}{Références Bibliographiques}
+	
+	% Annexes
+	\appendix
+	\chapter*{Annexe I : Expression des constantes physiques}
+	\addcontentsline{toc}{chapter}{Annexe I : Expression des constantes physiques}
+	\label{chp:annexe I}
+	\begin{align*}
+		a &= \frac{1}{\cos\theta L_{\text{fl}}}, \quad b=\tan\theta, \quad r=0.25s, \quad c=\frac{0.3}{L_{\text{fl}}} \\ 
+		\\
+		\gamma_1& = \rho_f C_{\text{pf}} \phi, \quad \gamma_2 = \rho_f h_{\text{vap}} \phi,  \quad \alpha_2 = rE_b\\
+		\\
+		\alpha_1 &= \frac{a_{fb}E_{fl}}{2l_f}\tanh\left(\frac{2}{3}\left(\frac{w}{L_{fl}}\right)^{1/3}\right) , \quad \alpha_3 = -\frac{\epsilon_{fb}\sigma}{l_f} \\
+		\\
+		\alpha_4 &= \frac{0.565k_{fl}(\rho u)^{1/2}\mathrm{Pr}^{1/2}}{\mu l_f}, \quad \alpha_5 = \frac{0.565k_\infty(\rho u)^{1/2}}{\mu l_f} \\
+		\\
+		\alpha_6 &= \frac{0.911sk_b\mathrm{Re}_D^{0.385}\mathrm{Pr}^{1/3}}{D}, \quad \alpha_7 = \frac{0.911sk_\infty\mathrm{Re}_D^{0.385}\mathrm{Pr}^{1/3}}{D}
+	\end{align*}
+	
+
+	\pagenumbering{roman}
+	\chapter*{Annexe II : Illustration du corps}
+	\addcontentsline{toc}{chapter}{Annexe II : Illustration du corps}
+	\label{chp:annexe II}
+	
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=0.6\linewidth]{im9}
+		\caption{De l'intelligence artificielle aux réseaux de neurones PINNs.}
+		\label{fig:im9}
+	\end{figure}
+		\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.6\linewidth]{im16}
+	\caption{Propagation du feu en situation réel dans une végétation dense.}
+	\label{fig:im16}
+\end{figure}
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=0.6\linewidth]{im14_1}
+		\caption{Schéma du "Event-Driven"}
+		\label{fig:im141}
+	\end{figure}
+
+\chapter*{Annexe III : Codes sources : Python}
+\addcontentsline{toc}{chapter}{Annexe II : codes sources}
+\label{chp:annexe III}
+
+\begin{lstlisting}[style=pythonstyle]
+import torch
+import torch.nn as nn
+import numpy as np
+import torch.autograd as autograd
+import matplotlib.pyplot as plt
+import math
+import torch, torch.nn as nn, torch.nn.functional as F
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+# ========== DÉFINITION DES PARAMÈTRES PHYSIQUES ==========
+sigma = 5.67e-8, lf = 0.114, L_fl = 1.69, Uw = 1.1, Omega_s_deg = 17, Omega_s = math.radians(Omega_s_deg), rho_f = 609, phi = 0.008, cp_f = 2500, h_vap = 2.25e6, T_ig = 561.0, T_inf = 303.0, Mw_inf=0.11, T_fl = 1083.0, T_b = 561.0, D = 0.00252, w = 0.686, afb = 0.6, eps_fb = 0.9, s = 17.5, k_fl = 0.1, k_b = 0.0495, mu = 6.2e-5, Pr = 0.71
+# === Fonctions intermediares  ===
+def Omega_w(Uw=Uw, g=9.81, L_fl=L_fl):
+Uw_t = torch.tensor(Uw), gL_t = torch.tensor(g * L_fl)
+return torch.atan(1.4 * Uw_t / torch.sqrt(gL_t))
+def theta(Uw=Uw, Omega_s=Omega_s):
+return torch.tensor(Omega_s) + Omega_w(Uw)
+def Z(y, L_fl=L_fl):
+th = theta()
+return (y / L_fl - torch.sin(th)) / torch.cos(th)
+# === definition des flux ===
+def epsilon_fl(L_fl=L_fl):
+return 1 - torch.exp(torch.tensor(-0.6 * L_fl))
+def E_fl():  # Flux émis par la flamme
+return epsilon_fl() * sigma * T_fl**4
+def E_b():
+return sigma * T_b**4
+def q_rs(y):  # Chaleur par rayonnement de la flamme
+Z_val = Z(y), tanh_term = torch.tanh(torch.tensor((2 / 3) * (w / L_fl)**(1 / 3)))
+return (afb * E_fl() / (2 * lf)) * (1 - Z_val / torch.sqrt(1 + Z_val**2)) * tanh_term
+def q_ri(y):  # Rayonnement du lit de braises
+return 0.25 * s * E_b() * torch.exp(-0.25 * s * y)
+def q_pr(y, T):  # Rayonnement des braises
+return -eps_fb * sigma / lf * (T**4 - T_inf**4) #expression non linearisé
+def Re_y(y):  # Nombre de Reynolds local
+return rho_f * Uw * y / mu
+def q_cs(y, T):
+eps = 1e-1, y_safe = y + eps, Re = Re_y(y_safe), coeff = 0.565 * k_fl * Re.sqrt() * Pr**0.5, base = y_safe * lf, exponent = torch.exp(-0.3 * y_safe / L_fl), q_val = coeff / base * (T_fl - T) * exponent
+return q_val 
+def Re_D():
+U_fb = (1 - phi) * Uw
+return rho_f * U_fb * D / mu
+def q_ci(y, T):  # Convection du lit de braises
+Re = Re_D()
+return (0.911 * s * k_b * Re**0.385 * Pr**(1 / 3)) / D * (T_b - T) * torch.exp(-0.25 * s * y)
+def Q_1(y, T):
+q = q_rs(y) + q_ri(y) + q_pr(y, T) + q_cs(y, T) + q_ci(y, T)
+return q
+def Q_2(y):
+"""Calcule de Q_2(y) à T=373K"""
+T_fixed = torch.tensor(373.0).to(y.device), q_rs_val = q_rs(y), q_ri_val = q_ri(y), q_pr_val = q_pr(y, T_fixed), q_cs_val = q_cs(y, T_fixed), q_ci_val = q_ci(y, T_fixed)
+return q_rs_val + q_ri_val + q_pr_val + q_cs_val + q_ci_val
+# -----Réseau de base----------
+class Net(nn.Module):
+def __init__(self, out_scale=1.0):
+super().__init__()
+self.net = nn.Sequential(
+nn.Linear(1, 64), nn.Tanh(),
+nn.Linear(64, 64), nn.Tanh(),
+nn.Linear(64, 1)
+)
+self.out_scale = out_scale
+def forward(self, y):
+return self.out_scale * torch.sigmoid(self.net(y))
+# ------Modèle : T(y), Mw(y) et paramètre R appris--------------
+class JointModel(nn.Module):
+def __init__(self, lambda_chi=1000.0, R_min=0.0, R_max=0.08):
+super().__init__()
+self.T_net  = Net(out_scale=300.0)
+self.Mw_net = Net(out_scale=0.11)
+self.R_raw  = nn.Parameter(torch.tensor(0.0))
+self.lambda_chi = lambda_chi
+self.R_min = R_min
+self.R_max = R_max
+def forward(self, y):
+T  = 300.0 + self.T_net(y)
+Mw = self.Mw_net(y)
+return T, Mw
+def R(self):
+return self.R_min + (self.R_max - self.R_min) * torch.sigmoid(self.R_raw)
+def chi(self, T):
+return torch.sigmoid(self.lambda_chi * (T - 373.0))
+# ----------------Boucle dentrainement------------------------------------------
+def train_joint_model(n_epochs=10000, lambda_chi=10000.0, lr=1e-3):
+model     = JointModel(lambda_chi=lambda_chi).to(device)
+optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+# points de collocation
+y_train = torch.linspace(0, 12, 120, device=device).view(-1, 1)
+y_train.requires_grad_()
+for epoch in range(n_epochs):
+optimizer.zero_grad()
+T, Mw = model(y_train)
+R     = model.R()
+chi   = model.chi(T)
+# dérivées
+dT_dy  = autograd.grad(T,  y_train, torch.ones_like(T),  create_graph=True)[0]
+dMw_dy = autograd.grad(Mw, y_train, torch.ones_like(Mw), create_graph=True)[0]
+# résidus pondérés
+res_T  = (1 - chi) * (dT_dy + Q_1(y_train, T) / (rho_f * cp_f  * phi * R))
+res_Mw = chi       * (dMw_dy - Q_2(y_train)   / (rho_f * h_vap * phi * R))
+loss_pde = torch.mean(res_T**2 + res_Mw**2)
+# condition initiale en y = 12  (T= T_inf, Mw = Mw_inf)
+y_ic = torch.tensor([[12.0]], device=device)
+T_ic, Mw_ic = model(y_ic)
+loss_ic = (9_0000 * (T_ic - T_inf)**2 + 1e20 * (Mw_ic - Mw_inf)**2)
+loss = loss_pde + loss_ic
+loss.backward()
+optimizer.step()
+if epoch % 500 == 0:
+print(f"Epoch {epoch:5d} | loss={loss.item():.3e} | R={R.item():.4f}")
+return model
+# -----------------Entraînement--------------------------------
+model = train_joint_model(n_epochs=5000, lambda_chi=100)
+with torch.no_grad():
+R_learned = model.R().item()
+print(f"\nParamètre R appris : {R_appris:.4f}")
+# ------------------profils fins------------------------------------
+y_fine = torch.linspace(0, 12, 600, device=device).view(-1, 1)
+T_val, Mw_val = model(y_fine)
+y_np  = y_fine.cpu().numpy().flatten()
+T_np  = T_val.cpu().numpy().flatten()
+Mw_np = Mw_val.cpu().numpy().flatten()
+# === Analyse post-entraînement pour extraire les valeurs ===
+with torch.no_grad():
+y_fine = torch.linspace(0, 12, 1000, device=device).view(-1, 1)
+T_vals, Mw_vals = model(y_fine)
+target_temp = 373.0
+diffs = torch.abs(T_vals - target_temp)
+min_diff, idx = torch.min(diffs, dim=0)
+y_target = y_fine[idx].item()
+target_Mw = 0.11
+diffs_Mw = torch.abs(Mw_vals - target_Mw)
+min_diff_Mw, idx_Mw = torch.min(diffs_Mw, dim=0)
+y_Mw_target = y_fine[idx_Mw].item()
+T0 = model(torch.tensor([[0.0]], device=device))[0].item()
+T12 = model(torch.tensor([[12.0]], device=device))[0].item()
+Mw0 = model(torch.tensor([[0.0]], device=device))[1].item()
+Mw12 = model(torch.tensor([[12.0]], device=device))[1].item()
+# === Tracé des résultats avec y_target ===
+def plot_results(model, y_target, y_Mw_target):
+y = torch.linspace(0, 12, 300, device=device).view(-1, 1)
+T, Mw = model(y)
+y_np = y.cpu().detach().numpy()
+T_np = T.cpu().detach().numpy()
+Mw_np = Mw.cpu().detach().numpy()
+plt.figure(figsize=(10, 4))
+# === Température ===
+plt.subplot(1, 2, 1)
+plt.plot(y_np, T_np, label="Température T(y)", color='orange')
+plt.axhline(T_inf, color='red', linestyle='--', label="T(12) attendu")
+plt.axhline(373, color='gray', linestyle=':', linewidth=1.2, label="Seuil T = 373 K")
+plt.scatter([y_target], [373], color='green', marker='X', s=100, label=f"T=373K à y={y_target:.2f} m")
+plt.axvline(x=y_target, color='green', linestyle=':', linewidth=1.2)
+plt.xlabel("y (m)"); plt.ylabel("T (K)")
+plt.title("Profil de Température"); plt.grid(); plt.legend()
+# === Humidité ===
+plt.subplot(1, 2, 2)
+plt.plot(y_np, Mw_np, label="Humidité Mw(y)", color='blue')
+plt.axhline(Mw_inf, color='red', linestyle='--', label="Mw(12) attendue")
+plt.scatter([y_Mw_target], [0.11], color='purple', marker='X', s=100, label=f"Mw=0.11 à y={y_Mw_target:.2f} m")
+plt.axvline(x=y_Mw_target, color='purple', linestyle=':', linewidth=1.2)
+plt.xlabel("y (m)"); plt.ylabel("Mw")
+plt.title("Profil d’Humidité"); plt.grid(); plt.legend()
+plt.tight_layout()
+plt.show()
+plot_results(model, y_target, y_Mw_target)
+#==================graphe combinée==========
+def plot_combined_graph(model, y_target):
+y = torch.linspace(0, 12, 300, device=device).view(-1, 1)
+T, Mw = model(y)
+y = y.cpu().detach().numpy().flatten()
+T = T.cpu().detach().numpy().flatten()
+Mw = Mw.cpu().detach().numpy().flatten()
+fig, ax1 = plt.subplots(figsize=(8, 4))
+# ------------------------------------------Axe 1 : Température--------------
+ax1.set_xlabel("y (m)")
+ax1.set_ylabel("Température T(y) [K]", color='orange')
+ax1.plot(y, T, color='orange', label="Température T(y)")
+ax1.axhline(373, color='gray', linestyle=':', linewidth=1.2, label="Seuil T = 373 K")
+ax1.axhline(T_inf, color='red', linestyle='--', label="T(12) attendu")
+ax1.axvline(x=y_target, color='green', linestyle=':', linewidth=1.2)
+ax1.scatter([y_target], [373], color='green', marker='X', s=100, label=f"T=373K à y={y_target:.2f} m")
+ax1.tick_params(axis='y', labelcolor='orange')
+# ---------------------------------Axe 2 : Mw------------------------------
+ax2 = ax1.twinx()
+ax2.set_ylabel("Humidité Mw(y)", color='blue')
+ax2.plot(y, Mw, color='blue', label="Humidité Mw(y)")
+ax2.axhline(Mw_inf, color='red', linestyle='--', label="Mw(12) attendue")
+ax2.tick_params(axis='y', labelcolor='blue')
+#------------------------------- Légende combinée-------------------------------
+lines1, labels1 = ax1.get_legend_handles_labels()
+lines2, labels2 = ax2.get_legend_handles_labels()
+fig.legend(lines1 + lines2, labels1 + labels2, loc='lower center', bbox_to_anchor=(0.5, -0.2), ncol=2)
+fig.tight_layout()
+plt.title("Profils combinés Température & Humidité")
+plt.grid()
+plt.show()
+plot_combined_graph(model, y_target)
+# === Résumé imprimé ===
+print("\n=== Résumé des résultats ===")
+#print(f"Valeur de R utilisée : {R}")
+print(f"y* tel que T(y*) ≈ 373 K : y = {y_target:.4f} m")
+print(f"y* tel que Mw(y*) ≈ 0.11 : y = {y_Mw_target:.4f} m")
+print(f"T(0)  = {T0:.2f} K")
+print(f"T(12) = {T12:.2f} K")
+print(f"Mw(0)  = {Mw0:.5f}")
+print(f"Mw(12) = {Mw12:.5f}")
+# ==== Paramètres ====
+l_f = 0.114 
+y = torch.linspace(0, 12, 100).view(-1, 1).to(device)
+# Récupération des profils T et Mw
+with torch.no_grad():
+T_pred, Mw_pred = model(y)
+T = T_pred.detach()
+Mw = Mw_pred.detach()
+# Calcul des flux volumiques (en kW/m³)
+q_rs_vol = q_rs(y).detach().cpu().numpy().flatten() / l_f 
+q_ri_vol = q_ri(y).detach().cpu().numpy().flatten() / l_f 
+q_cs_vol = q_cs(y, T).detach().cpu().numpy().flatten() / l_f 
+q_pr_vol = q_pr(y, T).detach().cpu().numpy().flatten() / l_f 
+q_ci_vol = q_ci(y, T).detach().cpu().numpy().flatten() / l_f 
+# ==== Tracé des contributions ====
+plt.figure(figsize=(10, 6))
+plt.plot(y.cpu().numpy(), q_rs_vol, label='Radiation surfacique', linestyle='--', color='red')
+plt.plot(y.cpu().numpy(), q_cs_vol, label='Convection surfacique', linestyle='-.', color='blue')
+plt.plot(y.cpu().numpy(), q_ri_vol, label='Radiation interne', linestyle=':', color='green')
+plt.plot(y.cpu().numpy(), q_ci_vol, label='Convection interne', color='purple')
+plt.plot(y.cpu().numpy(), q_pr_vol, label='Perte radiative', linestyle='--', color='orange')
+plt.xlabel('Distance à la flamme y [m]')
+plt.ylabel('Contribution des flux [kW/m³]')
+plt.title('Contribution des flux vs Distance (Bouleau blanc, +17° pente, 1.1 m/s vent)')
+plt.legend()
+plt.grid(True)
+plt.xlim(0, 12)
+plt.ylim(-60, 150)
+plt.tight_layout()
+plt.show()
+y_values = torch.tensor([[0.0, 1.0, 2.0, 4.0, 6.0, 8.0, 12.0]], device=device).T
+T_values, Mw_values = model(y_values)
+print("  y (m) | T(y) (K) | Mw(y) |  q_rs  |  q_cs  |  q_ri  |  q_ci  |  q_pr   | Total")
+print("----------------------------------------------------------------------------")
+for y_i, T_i, Mw_i in zip(y_values, T_values, Mw_values):
+q_rs_val = q_rs(y_i).item() / l_f 
+q_cs_val = q_cs(y_i, T_i).item() / l_f 
+q_ri_val = q_ri(y_i).item() / l_f 
+q_ci_val = q_ci(y_i, T_i).item() / l_f 
+q_pr_val = q_pr(y_i, T_i).item() / l_f 
+total = q_rs_val + q_cs_val + q_ri_val + q_ci_val + q_pr_val
+print(f"{y_i.item():6.1f} | {T_i.item():7.1f} | {Mw_i.item():5.3f} | {q_rs_val:6.1f} | {q_cs_val:6.1f} | {q_ri_val:6.1f} | {q_ci_val:6.1f} | {q_pr_val:7.1f} | {total:6.1f}")
+\end{lstlisting}
+
+
+
+
+\end{document}
