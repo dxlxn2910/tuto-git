@@ -1,0 +1,74 @@
+************************************ LES PARAMATRE SWN********************************************
+*ROS=1.2M/S ==>EXPERIENCE  ROS=1.23M/S====>MODELE
+* NOMBRE DE ZONE POUR LA CONCENTRATION EN SITE ACTIF(NBRE_ZONE_XCONC)  *TYPE DE VEGETATION (NBRE_VEGETATION)
+1,                                                                     1
+*CONCENTRATION EN SITE ACTIF PAR ZONE(XCONC) *LIMITE X DE LA ZONE(XDEBUT,XFIN)  *LIMITE Y DE LA ZONE(YDEBUT,YFIN)
+1.D0,                                       1.D0,220.D0,                  1.D0,200.D0                      
+* TEMPS DE COMBUSTION:TC(S) 
+15.D0,                                                                              
+*NOMBR MAX DE SITES EN FEU  *NOMBRE DE VOISIN PAR SITE EN FEU   *COEFFICIENT DOMAINE DE CALCUL  
+5000,                      400,                                10.5D0 
+*NOMBRE MAXIMUM D'ITERATIONS EN TEMPS (IT_MAX) *NOMBRE DE FREQUENCE D'IMPRESSION  (IT_FREQ)
+220,                                           1
+*NOMBRE D'ECLOSION    *DIMENSIONS DOMAINE D'ETUDE:LXS,LYS(M)    
+1,                    220.D0,           200.D0,        
+*COORDONNEES PHYSIQUE X_ECLOSION,Y_ECLOSION (EN M)    *COTE:N NORD;S SUD;W WEST;E EST;C CENTRE  *LONGUEUR DU FEU (EN M)
+0.D0,100.D0,                                               C,                                    175.D0
+************************************ LES LONGUEURS (M)****************************************
+*
+*LONGUEUR FLAMME:LFL *HAUTEUR COUCHE COMBUSTIBLE:HC *DIAMETRE DU SITE COMBUSTIBLE:D          
+5.D0,                   0.51D0,                          1.D-3        
+************************************ LES TEMPERATURES (K)***********************************
+*
+*TEMPERATURE AMBIANTE:TINFINI *TEMPERATURE FLAMME:TFL  *TEMPERATURE D'ALLUMAGE:TPIMF   *TEMPERATURE DES BRAISES:TB
+305.D0,                            1202.13D0,                550.D0,                     617.1D0
+************************************ LES VITESSES & DIRECTIONS********************************
+*
+*VITESSE DU VENT:UW(M/S)   *DIRECTION DU VENT:DIR1 °  *LA PENTE DU TERRAIN
+5.76D0,                270.D0,                            0.D0     
+************************************ LES COEFFICIENTS*****************************************
+*
+*COEFFICIENT D'ABSORPTION COUCHE COMBUSTIBLE:COEABSORP  *EMISSIVITé DE LA COUCHE COMBUSTIBLE:EPSC  
+0.72D0,                                                0.7705D0                              
+*EMISSIVITé DES BRAISES:EPSb  *NBRE DE PRANDLT PR
+1.D0,                        0.71D0
+************************************ LES CHALEURS SPECIFIQUES**********************************
+*
+* CHALEUR SPEC. COUCHE COMBUSTIBLE:CPf(J/KG/K) 4.22D3
+1.25D3  
+*CHALEUR LATENTE D'EVAPORATION:HVAP(J/KG) *CHALEUR DE COMBUSTION:HCOMB(KJ/KG) 
+2.25D6,                            17.781D0
+************************************ LES CARACTERISTIQUES DE L'AIR******************************
+*
+*CONDUCTIVITE Kg(W/mK) A 500°C *DENSITY ROg(kg/m3) A 500°C *VISCOSITE CINEMATIQUE VISCOg(m²/s) A 500°C *CHALEUR SPECIFIQUE:CPg(J/KG°K) A 1273K(P.SANTONI)
+0.07777,                   0.29646D0,             8.547D-5,                                                1290.D0                       
+*CONDUCTIVITE KB A 300°C *CONDUCTIVITE KINF A 20°C *VISCOSITE CINEMATIQUE VISCOgINF A 20°C   
+0.0495D0,                 0.02489D0,              1.35D-5                       
+************************************ LES PROPRIETES PHYSIQUE DU COMBUSTIBLE*************************
+*
+* FRACTION VOLUMIQUE COUCHE COMBUSTIBLE:PHI *MASSE VOLUMIQUE DU COMBUSTIBLE:ROP(KG/M3) *SURFACE SPECIFIQUE:SSP *TENEUR EN EAU:W *CHARGE MASSIQUE
+0.0012D0,                                   512.D0,                               14.69D0,                        0.058D0,  0.313D0                                                                                                   
+************************************ LES PAS*******************************************************
+*
+* PAS D'ESPACE           *PAS DE TEMPS1.04D0        *RAPPORT      *VEG HOMOGENE      *LECTURE (0:OUI;1:NON;2:AUTRE)	  
+1.6D0,                       1.D0,                 50,           OUI,            1                                       
+**********************************************************************************************************************
+SSP=4*PHI/D             !PREUVE SSP=s/V=(s/v)*(v/V)=(4/D)*(PHI)
+PHI=FUEL_LOAD/(ROP*HC)   !PREUVE ROP=m/v=(m/S)*(S/v)=(m/S)*(S*Lf/HC*v)=(m/S)*(V/HC*v)=FUEL_LOAD/(PHI*Lf) 
+LFL=0.0775*I^0.46      !MODELE BYRAM
+Cpg(KJ/KG°K) = 5.24 X 10-1 + 1.84 x 10-3 . T - 3.76 X 10-7 . T²    !Watcharapong Tachajapong et al. "EXPERIMENTAL AND NUMERICAL MODELING
+OF SHRUB CROWN FIRE INITIATION";Combust. Sci. and Tech., 181: 618-640, 2009
+
+*********Wikipedia*********
+conductivité thermique de l'air sec (20°C): 0.0262W/mK
+conductivité thermique du charbon de bois (0.2g/cm3) à 20°C: 0.055W/mK
+
+*-----METHODE DE CALCUL DE HVAP (PATRICK PAGNI ET AL.)------
+
+     HVAP(KCAL/KG) = (365KCAL/KG.°K)*(373,16°K-TINFINI)+538,35KCAL/KG
+	 0.1092934D6 J/KG*
+
+l'émissivité des braise=0.23 pour WEISe.
+Pour Weise, la température de la flamme est égale à la température des braises
+
+!HIGN=460.D0+2590.D0*W           !VAN WAGNER(1977)      Qig = 581 + 2594 Mf   ROTHERMEL(1972)
