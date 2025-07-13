@@ -1,0 +1,10 @@
+les commandes a connaitre. 
+git int  #creer un environnement git
+git remote add origin "lien du repository" # pour envoyer le git sur github 
+git status # pour afficher l'etat actuel
+git add "nom des fichiers" # pour comiter le fichier
+git commit -m "nom du commit" pour enregistrer un commit
+
+git push --set -upstream origin master # pour pousser les modifications vers le commit avec master le nom de la branche par defaut
+
+
